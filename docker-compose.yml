@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: store
       POSTGRES_DB: record_store
     ports:
-      - "5432:5432"
+      - "5433:5432"   # host 5433 → container 5432 (a local Windows Postgres already uses 5432)
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
