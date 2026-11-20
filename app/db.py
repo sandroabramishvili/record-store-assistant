@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterator
+from datetime import datetime
 
-from sqlalchemy import MetaData
+from sqlalchemy import DateTime, MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -30,6 +31,9 @@ class Base(DeclarativeBase):
     """Parent class for all SQLAlchemy models."""
 
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
+
+    # Every `Mapped[datetime]` column becomes TIMESTAMP WITH TIME ZONE.
+    type_annotation_map = {datetime: DateTime(timezone=True)}
 
 
 async def get_db() -> AsyncIterator[AsyncSession]:
