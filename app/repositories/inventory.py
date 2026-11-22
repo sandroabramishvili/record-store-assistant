@@ -4,6 +4,7 @@ from sqlalchemy import exists, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import InventoryItem, Reservation
+from app.services.reservations import release_expired
 
 
 async def has_active_reservation(
@@ -19,5 +20,5 @@ async def has_active_reservation(
         )
     else:
         raise ValueError('Pass item_id or record_id')
-    # TODO Phase 6.1: call release_expired(db) first, so an expired reservation doesn't block.
+    await release_expired(db)  # an expired reservation must not block a delete or status change
     return bool(await db.scalar(select(exists(query))))

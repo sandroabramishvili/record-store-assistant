@@ -13,6 +13,7 @@ from app.schemas.catalog import Format, InventoryOut, RecordDetail, RecordIn, Re
 from app.schemas.common import Page
 from app.services.conditions import CONDITION_ORDER, Condition, condition_rank
 from app.services.normalize import normalize_name
+from app.services.reservations import release_expired
 
 router = APIRouter(prefix='/records', tags=['catalog'])
 
@@ -48,7 +49,7 @@ async def list_records(
     page: Annotated[int, Query(ge=1)] = 1,
     size: Annotated[int, Query(ge=1, le=50)] = 20,
 ) -> Page[RecordSummary]:
-    # TODO Phase 6.1: release_expired(db) first, so expired reservations count as in stock.
+    await release_expired(db)  # expired reservations count as in stock again
     filters = []
     if genre:
         g = genre.strip().lower()
@@ -112,6 +113,7 @@ async def list_records(
 @router.get('/{record_id}', response_model=RecordDetail)
 async def get_record(record_id: int, user: CurrentUser, db: DbSession) -> RecordDetail:
     """Release + tracklist + copies. Customers see copies in stock; staff see every copy."""
+    await release_expired(db)
     record = await _get_record_or_404(db, record_id)
     query = select(InventoryItem).where(InventoryItem.record_id == record_id).order_by(InventoryItem.price)
     if user.role != 'staff':
