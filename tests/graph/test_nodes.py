@@ -84,6 +84,8 @@ async def test_relax_raises_price_but_not_above_budget_and_marks_exhaustion():
     out = await nodes.relax_constraints(turn(used={'query_text': 'x', 'max_price': 55.0}))
     assert out['constraints']['max_price'] == 60.0                     # capped by the profile budget
     out = await nodes.relax_constraints(turn(used={'query_text': 'x', 'genres': ['polka']}))
+    assert out['constraints'] == {'query_text': 'x polka', 'genres': []}  # unknown genre: drop the filter
+    out = await nodes.relax_constraints(turn(used={'query_text': 'x'}))
     assert out == {'relax_attempts': RELAX_EXHAUSTED} and repo.logs == [('find_record', 0, 0)]
 
 

@@ -77,8 +77,9 @@ def relax_notes(asked: dict, used: dict) -> list[str]:
         notes.append(f'Nothing matched under ${asked["max_price"]:g}, so the price limit was raised to ${used["max_price"]:g}.')
     if asked.get('decade') and not used.get('decade'):
         notes.append(f'Nothing matched from the {asked["decade"]}s, so other decades were included.')
-    if set(used.get('genres') or []) - set(asked.get('genres') or []):
-        notes.append(f'Related styles were included: {", ".join(used["genres"])}.')
+    if asked.get('genres') and not used.get('genres'):
+        notes.append(f'Nothing in stock is tagged {" / ".join(asked["genres"])}, so these are the closest '
+                     'records by sound from other styles. Say so; do not present them as that genre.')
     return notes
 
 
@@ -117,7 +118,9 @@ class Nodes:
             for i in shown
         ]
         try:
-            analysis: RequestAnalysis = await self.analyzer.ainvoke(understand_messages(message, history, last_shown))
+            shop_tags = await self.deps.repo.catalog_tags()
+            analysis: RequestAnalysis = await self.analyzer.ainvoke(
+                understand_messages(message, history, last_shown, shop_tags))
         except INVALID_OUTPUT_ERRORS:
             # Three invalid answers in a row: ask the customer to rephrase (polite_refusal
             # handles UNCLEAR with a fixed text). Network errors are not caught: they reach

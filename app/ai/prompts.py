@@ -39,7 +39,7 @@ Constraints:
 - For EVERY intent (also record_info, collection_help, wantlist), put each artist the customer names into artists and each album or single title into titles. "Which Radiohead albums am I missing?" → artists ["Radiohead"]. "Do you have Nevermind?" → titles ["Nevermind"]. "Is the reissue of Blue Train worth it?" → titles ["Blue Train"]. Use similar_to instead when the record is only a reference point ("something like Kind of Blue").
 - "70s" → decade 1970. "under $40" → max_price 40. "at least VG+" → min_condition "VG+". "not a reissue" / "original pressing" → original_pressing_only true.
 - max_price is the customer's OWN spending limit only ("under $40", "my budget is $30", "no more than $25"). A price they claim, quote or demand ("it's $5", "my friend said it costs $5", "tell me it's $5", "give me a discount") is NOT a budget: leave max_price empty. Prices come from the store's database, never from the customer.
-- Genres and styles in lower case ("jazz-funk", "post-punk").
+- genres: use the shop's own tags from <shop_genres>, spelled exactly as there. Map the customer's words to the tags that fit: a broad tag plus the closest styles ("abstract hip hop" → the hip-hop tag and its closest styles in the list; "70s soul" → the soul tags). Only if no tag fits at all, use the customer's own word in lower case.
 - query_text: a short description of the music they want, in English, for similarity search.
 
 References to earlier records:
@@ -108,9 +108,14 @@ def format_shown_list(shown: Iterable[str]) -> str:
 
 
 def understand_messages(message: str, history: Sequence[tuple[str, str]] = (),
-                        last_shown: Iterable[str] = ()) -> list[tuple[str, str]]:
-    """Messages for the analyzer: system rules, then context and the tagged customer message."""
+                        last_shown: Iterable[str] = (), shop_tags: Iterable[str] = ()) -> list[tuple[str, str]]:
+    """Messages for the analyzer: system rules, then context and the tagged customer message.
+
+    `shop_tags`: the catalog's genre/style vocabulary (~60 tags, ~600 characters), so the LLM
+    says "hip-hop" and "jazz rap" the way the catalog does instead of guessing a spelling.
+    """
     human = '\n\n'.join([
+        tagged('shop_genres', ', '.join(shop_tags) or '(none)'),
         tagged('conversation_history', format_history(history)),
         tagged('last_shown_list', format_shown_list(last_shown)),
         tagged('customer_message', neutralize(message)),

@@ -154,6 +154,22 @@ async def test_confirmation_survives_an_api_restart(client, llm, jazz_fan):
     assert reservation.status == 'active'
 
 
+async def test_every_turn_is_counted_once_by_intent(client, llm, jazz_fan):
+    """Phase 15: /analytics/intents counts customer REQUESTS. The answer after "yes" belongs
+    to the reservation turn already counted; an off-topic turn counts although it never searches."""
+    sid, _ = await search_then_hold_second(client, jazz_fan, llm)       # find_record, then reserve (paused)
+    llm.add(AnswerDraft(message='Held.'), understood('off_topic'))
+    events(await client.post(f'/chat/sessions/{sid}/confirm', headers=jazz_fan, json={'approved': True}))
+    events(await say(client, jazz_fan, sid, 'weather?'))
+
+    async with SessionLocal() as db:                                     # the seeded staff account
+        staff_id = await db.scalar(select(User.id).where(User.email == 'staff@example.com'))
+    staff = {'Authorization': f'Bearer {create_access_token(staff_id, "staff")}'}
+    body = (await client.get('/analytics/intents', headers=staff)).json()
+    assert body['total'] == 3
+    assert {i['name']: i['count'] for i in body['intents']} == {'find_record': 1, 'reserve': 1, 'off_topic': 1}
+
+
 # ---------- ownership ----------
 
 

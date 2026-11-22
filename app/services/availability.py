@@ -10,6 +10,7 @@ from decimal import Decimal
 from typing import Any, NotRequired, TypedDict
 
 from app.services.conditions import meets_minimum
+from app.services.normalize import normalize_tag
 
 
 class Candidate(TypedDict):
@@ -55,8 +56,9 @@ def filter_available(
     budget_cap = to_money(profile.get('budget_cap'))
     min_condition = profile.get('min_condition')
     # An explicit request beats a profile dislike: "I know I said no jazz, but show me jazz".
-    requested = {g.lower() for g in requested_genres}
-    disliked = {g.lower() for g in profile.get('disliked_genres') or []} - requested
+    # Tags compared by spelling-insensitive key: a dislike of "hip hop" also hides "hip-hop".
+    requested = {normalize_tag(g) for g in requested_genres}
+    disliked = {normalize_tag(g) for g in profile.get('disliked_genres') or []} - requested
 
     result = []
     for item in items:
@@ -76,7 +78,7 @@ def filter_available(
         if not meets_minimum(item['media_condition'], min_condition):
             continue
         # 5. Disliked genres (genres or styles), unless asked for explicitly in this request.
-        tags = {g.lower() for g in [*item['genres'], *item.get('styles', [])]}
+        tags = {normalize_tag(g) for g in [*item['genres'], *item.get('styles', [])]}
         if disliked & tags:
             continue
         result.append(item)

@@ -13,13 +13,13 @@ import logging
 from decimal import Decimal
 
 from langchain_postgres import PGVector
-from sqlalchemy import func, literal, or_, select
+from sqlalchemy import func, literal, or_, select, union
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.indexing import record_to_text
 from app.models import InventoryItem, Record
 from app.services.conditions import CONDITION_ORDER, condition_rank
-from app.services.normalize import normalize_name
+from app.services.normalize import normalize_name, normalize_tag
 from app.services.ranking import rank
 from app.services.reservations import release_expired
 from app.services.taste import taste_score
@@ -60,6 +60,12 @@ async def find_reference_releases(db: AsyncSession, similar_to: str | None) -> l
         ).order_by(Record.id)
     )
     return list(rows.all())
+
+
+async def catalog_tags(db: AsyncSession) -> list[str]:
+    """Every genre and style used in the catalog, as spelled there (sorted, no duplicates)."""
+    rows = await db.execute(union(select(func.unnest(Record.genres)), select(func.unnest(Record.styles))))
+    return sorted(r[0] for r in rows)
 
 
 def build_query_text(constraints: dict, references: list[Record]) -> str:
@@ -109,7 +115,13 @@ async def search_inventory(
     if constraints.get('original_pressing_only'):
         stmt = stmt.where(Record.is_reissue.is_(False))
     if constraints.get('genres'):
-        genres = [g.strip().lower() for g in constraints['genres']]
+        # Match by spelling-insensitive key ("hip hop" finds "hip-hop"), then filter with the
+        # catalog's own spellings. No catalog tag matches → nothing to find (→ relax).
+        wanted = {normalize_tag(g) for g in constraints['genres']}
+        genres = [t for t in await catalog_tags(db) if normalize_tag(t) in wanted]
+        if not genres:
+            logger.info('search: no catalog tag for %s', constraints['genres'])
+            return []
         stmt = stmt.where(or_(Record.genres.overlap(genres), Record.styles.overlap(genres)))
     if constraints.get('artists'):
         stmt = stmt.where(Record.artist_norm.in_([normalize_name(a) for a in constraints['artists']]))

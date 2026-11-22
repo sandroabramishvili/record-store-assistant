@@ -29,7 +29,7 @@ from app.models import (
     TasteProfile,
     WantlistItem,
 )
-from app.repositories.search import search_inventory
+from app.repositories.search import catalog_tags, search_inventory
 from app.repositories.wantlist import refresh_matches
 from app.services.customer import CustomerContext
 from app.services.normalize import normalize_name
@@ -182,6 +182,11 @@ class StoreRepository:
              'tracklist': [t['title'] for t in r.tracklist or []], 'copies_in_stock': by_record.get(r.id, [])}
             for r in records
         ]
+
+    async def catalog_tags(self) -> list[str]:
+        """The shop's genre/style vocabulary, as spelled in the catalog (for the UNDERSTAND prompt)."""
+        async with self.session() as db:
+            return await catalog_tags(db)
 
     async def catalog_titles(self) -> dict[str, list[int]]:
         """title_norm → record ids, for verify_draft's "in stock" claim check (Phase 5)."""

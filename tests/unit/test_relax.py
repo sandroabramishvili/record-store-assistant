@@ -29,15 +29,23 @@ def test_price_never_above_budget_cap():
     assert out['max_price'] == 45.0 and out['decade'] is None
 
 
-def test_attempt_2_drops_decade_and_widens_genres():
+def test_attempt_2_drops_decade_and_the_genre_filter():
     out = relax_constraints(request(), 2, profile={})
     assert out['decade'] is None
-    assert out['genres'] == ['jazz-funk', 'jazz', 'funk', 'soul']
+    assert out['genres'] == []                                   # no longer a filter...
+    assert out['query_text'] == '70s jazz-funk'                  # ...but still what the similarity ranks by
+
+
+def test_dropped_genres_move_into_the_similarity_query():
+    """Real chat: "abstract hip hop" matched no catalog tag. The words must keep steering the
+    ranking, so the closest-sounding records come first."""
+    out = relax_constraints(request(genres=['abstract hip hop', 'jazz-funk'], query_text='something chill'), 2, {})
+    assert out['genres'] == [] and out['query_text'] == 'something chill abstract hip hop jazz-funk'
 
 
 def test_no_price_goes_straight_to_decade_and_genres():
     out = relax_constraints(request(max_price=None), 1, profile={})
-    assert out['decade'] is None and 'jazz' in out['genres']
+    assert out['decade'] is None and out['genres'] == []
 
 
 def test_relax_never_touches_hard_rules():
@@ -68,5 +76,5 @@ def test_relax_loop_limit():
     with pytest.raises(ValueError):
         relax_constraints(request(), MAX_RELAX_ATTEMPTS + 1, profile={})
     # Nothing left to loosen → result equals input, the signal to stop early.
-    bare = request(max_price=None, decade=None, genres=['polka'])
+    bare = request(max_price=None, decade=None, genres=[])
     assert relax_constraints(bare, 1, profile={}) == bare

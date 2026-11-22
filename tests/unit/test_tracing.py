@@ -13,6 +13,7 @@ from langchain_core.callbacks.manager import CallbackManager
 from langchain_core.tracers.langchain import LangChainTracer
 from langgraph.checkpoint.memory import InMemorySaver
 from langsmith import Client
+from langsmith import utils as ls_utils
 
 from app.ai import tracing
 from app.ai.chat import make_config, tag_with_intent
@@ -86,15 +87,31 @@ def test_tracing_is_off_in_tests():
     assert tracing.get_client() is None and tracing.tracing_callbacks() == []
 
 
-def test_our_tracer_is_the_only_one_even_with_env_tracing_on(monkeypatch):
-    """With LANGSMITH_TRACING=true in the environment (e.g. Docker), LangChain would add its
-    own tracer, without our anonymizer. It must not when ours is already in the callbacks."""
+@pytest.fixture
+def env_tracing_on(monkeypatch):
+    """LANGSMITH_TRACING=true for ONE test. langsmith caches what it reads from the environment
+    (`get_env_var` is lru_cached), so the cache must be cleared too, or the "true" (and the
+    fake key) leaks into every later test: they then try to send traces (found: 401 errors
+    from graph tests when this file ran first)."""
     monkeypatch.setitem(os.environ, 'LANGSMITH_TRACING', 'true')
     monkeypatch.setitem(os.environ, 'LANGSMITH_API_KEY', 'test')
+    ls_utils.get_env_var.cache_clear()
+    yield
+    ls_utils.get_env_var.cache_clear()          # (monkeypatch then restores the variables)
+
+
+def test_our_tracer_is_the_only_one_even_with_env_tracing_on(env_tracing_on):
+    """With LANGSMITH_TRACING=true in the environment (e.g. Docker), LangChain would add its
+    own tracer, without our anonymizer. It must not when ours is already in the callbacks."""
     ours = tracing.make_tracer(Client(api_key='test', api_url='http://langsmith.invalid', session=CapturingSession(),
                                       info={}))
     manager = CallbackManager.configure(inheritable_callbacks=[ours])
     assert [h for h in manager.handlers if isinstance(h, LangChainTracer)] == [ours]
+
+
+def test_tracing_setting_does_not_leak_out_of_a_test():
+    """Runs after the test above (file order): the environment is back to "off" for real."""
+    assert not ls_utils.tracing_is_enabled()
 
 
 # ---------- a whole graph turn, as LangSmith would receive it ----------

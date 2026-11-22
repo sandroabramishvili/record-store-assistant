@@ -8,6 +8,8 @@ Used wherever two names must be compared: duplicates in the collection/wantlist,
 "don't recommend what the customer owns", wantlist matching, taste score,
 and finding catalog titles in the assistant's answer.
 The result is a comparison key only; the original spelling is kept for display.
+
+normalize_tag does the same for genre / style tags ("hip hop" = "hip-hop").
 """
 
 import re
@@ -43,3 +45,17 @@ def normalize_name(value: str) -> str:
     if value.startswith('the ') and len(value) > 4:
         value = value[4:]
     return value
+
+
+_NOT_LETTER_OR_DIGIT = re.compile(r'[\W_]+')
+
+
+def normalize_tag(value: str) -> str:
+    """Comparison key for a genre / style tag: case, accents, spaces and punctuation don't count.
+
+    "hip-hop", "Hip Hop", "hip hop " and "hiphop" → "hiphop";  "jazz-rap" = "jazz rap" → "jazzrap".
+    Found in a real chat: the catalog says "hip-hop" and "jazz rap", the customer and the LLM
+    said "hip hop" and "jazz-rap", and every search came back empty.
+    """
+    value = _strip_latin_accents(unicodedata.normalize('NFKC', value)).casefold()
+    return _NOT_LETTER_OR_DIGIT.sub('', value)

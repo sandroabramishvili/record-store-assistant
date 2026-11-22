@@ -4,6 +4,7 @@ Checks what FakeRepo can't: SearchLog rows (10.8), real reservations and wantlis
 written after a confirmation, and real store rules on real data.
 """
 
+import pytest
 import pytest_asyncio
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
@@ -75,6 +76,38 @@ async def test_zero_result_search_is_logged_after_relaxing_and_wantlist_written_
     await graph.ainvoke(Command(resume={'confirmed': True}), config)
     [entry] = await rows(WantlistItem, WantlistItem.user_id == jazz_fan, WantlistItem.title_norm == 'nevermind')
     assert entry.artist == 'Nirvana' and entry.matched_item_id is None             # only copy is sold
+
+
+@pytest_asyncio.fixture
+async def beat_digger():
+    """Seeded customer who likes hip-hop (no budget cap, min VG)."""
+    await seed_catalog()
+    async with SessionLocal() as db:
+        return await db.scalar(select(User.id).where(User.email == 'beat.digger@example.com'))
+
+
+@pytest.mark.parametrize('asked, expected', [
+    (['hip hop'], {'Donuts', 'To Pimp a Butterfly', 'The Low End Theory'}),      # catalog: "hip-hop"
+    (['jazz-rap'], {'To Pimp a Butterfly', 'The Low End Theory', '3 Feet High and Rising'}),   # catalog: "jazz rap"
+])
+async def test_genre_spelling_does_not_matter(beat_digger, asked, expected):
+    """Real chat: "hip hop" and "jazz-rap" found nothing although the shop has both."""
+    graph, _ = graph_with(understood(genres=asked), feature_available('Here you go.', count=5))   # schema max 5
+    state = await graph.ainvoke(new_turn_input('hip hop please', beat_digger), {'configurable': {'thread_id': 'db-g'}})
+    titles = {i['title'] for i in state['available_items']}
+    assert expected <= titles and state['relax_attempts'] == 0                  # found at once, no loosening
+
+
+async def test_unknown_genre_falls_back_to_the_closest_records_and_says_so(beat_digger):
+    """A tag the shop doesn't use ("abstract hip hop"): instead of "nothing at all", the last
+    loosening step drops the genre filter and the answer is told these are the closest by sound."""
+    graph, llm = graph_with(understood(genres=['abstract hip hop']), feature_available('Closest by sound.'))
+    state = await graph.ainvoke(new_turn_input('abstract hip hop?', beat_digger), {'configurable': {'thread_id': 'db-u'}})
+    assert state['available_items'] and state['constraints']['genres'] == []
+    assert 'abstract hip hop' in state['constraints']['query_text']             # still steers the ranking
+    assert 'Nothing in stock is tagged abstract hip hop' in llm.prompts('AnswerDraft')[0]
+    [log] = await rows(SearchLog)
+    assert log.constraints['genres'] == ['abstract hip hop']                    # analytics see what was asked
 
 
 async def database_snapshot():

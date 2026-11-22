@@ -65,16 +65,36 @@ CASES = [
     ('Send me the full lyrics of Bohemian Rhapsody', [], [], check({'intent': 'off_topic'})),
     ('Where can I download this album?', [], [], check({'intent': 'off_topic'})),
     ("What's the weather in Tbilisi?", [], [], check({'intent': 'off_topic'})),
+    # Found in a real chat: the LLM wrote "hip hop" / "jazz-rap", the catalog says "hip-hop" /
+    # "jazz rap", and every search was empty. Now it must answer in the catalog's own tags.
+    ("I'm interested in hip hop, abstract hip hop specifically, what would you suggest I get?", [], [],
+     check({'intent': 'find_record', 'genres': lambda g: 'hip-hop' in g})),
+    ('Okay, jazz-rap sounds good', [], [], check({'genres': lambda g: 'jazz rap' in g})),
+    ('How about alternative rap or alternative hip hop?', [], [], check({'genres': lambda g: 'hip-hop' in g})),
+    ('classic hip hop', [], [], check({'genres': lambda g: 'hip-hop' in g})),
+    ('Any hip hop at all?', [], [], check({'genres': lambda g: 'hip-hop' in g})),
 ]
+
+
+async def load_shop_tags() -> list[str]:
+    """The catalog's genre vocabulary from the dev database, exactly as the app sends it."""
+    from app.db import SessionLocal, engine
+    from app.repositories.search import catalog_tags
+    async with SessionLocal() as db:
+        tags = await catalog_tags(db)
+    await engine.dispose()
+    return tags
 
 
 async def main(only: int | None) -> None:
     run = analyzer(get_chat_model())
+    tags = await load_shop_tags()
     passed = 0
     for n, (message, history, shown, checker) in enumerate(CASES, start=1):
         if only and n != only:
             continue
-        analysis = await with_rate_limit_retry(lambda: run.ainvoke(understand_messages(message, history, shown)))
+        analysis = await with_rate_limit_retry(
+            lambda: run.ainvoke(understand_messages(message, history, shown, tags)))
         problems = checker(analysis)
         passed += not problems
         c = analysis.constraints.model_dump(exclude_defaults=True, exclude={'query_text'})

@@ -17,7 +17,7 @@ from app.ai.graph import build_graph
 from app.ai.tracing import flush_traces
 from app.ai.vectorstores import close_vector_stores
 from app.db import engine
-from app.routers import auth, chat, collection, inventory, knowledge, profile, records, reservations, wantlist
+from app.routers import analytics, auth, chat, collection, inventory, knowledge, profile, records, reservations, wantlist
 from app.services.reservations import ItemNotFound, ReservationError
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
@@ -48,6 +48,7 @@ app.include_router(wantlist.router)
 app.include_router(reservations.router)
 app.include_router(knowledge.router)
 app.include_router(chat.router)
+app.include_router(analytics.router)
 
 
 @app.exception_handler(ReservationError)

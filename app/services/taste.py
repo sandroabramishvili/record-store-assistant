@@ -2,16 +2,18 @@
 
 from collections.abc import Iterable
 
+from app.services.normalize import normalize_tag
+
 GENRE_WEIGHT = 0.7
 ARTIST_WEIGHT = 0.3
 
 
 def genre_match(release_tags: Iterable[str], favorite_genres: Iterable[str]) -> float:
     """Share of the release's genres/styles that are among the customer's favorites."""
-    tags = {t.lower() for t in release_tags}
+    tags = {normalize_tag(t) for t in release_tags}            # "hip hop" = "hip-hop"
     if not tags:
         return 0.0
-    favorites = {g.lower() for g in favorite_genres}
+    favorites = {normalize_tag(g) for g in favorite_genres}
     return len(tags & favorites) / len(tags)
 
 

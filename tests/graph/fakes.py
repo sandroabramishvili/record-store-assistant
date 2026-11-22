@@ -134,6 +134,9 @@ class FakeRepo:
     async def record_details(self, *, titles=(), artists=(), limit=6):
         return self.details if (titles or artists) else []
 
+    async def catalog_tags(self):
+        return sorted({t for i in self.items.values() for t in [*i['genres'], *i['styles']]})
+
     async def catalog_titles(self):
         from app.services.normalize import normalize_name
         titles: dict[str, list[int]] = {}

@@ -1,0 +1,10 @@
+# Streamlit settings (read from the folder you run `streamlit run ui/app.py` in).
+
+[client]
+# Spec 10: never show a traceback to a user. The pages already catch every API error and
+# show st.error; this is the safety net for anything unexpected (message only, no details).
+showErrorDetails = "none"
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

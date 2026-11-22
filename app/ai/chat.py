@@ -25,6 +25,7 @@ from typing import Any
 from uuid import uuid4
 
 from langchain_core.runnables import RunnableConfig
+from langgraph.types import Command
 from sqlalchemy import func, update
 
 from app.ai.indexing import rate_limit_delay
@@ -101,10 +102,19 @@ async def pending_confirmation(graph, config: RunnableConfig) -> dict | None:
     return snapshot.interrupts[0].value if snapshot.interrupts else None
 
 
-async def save_message(session_id: int, role: str, content: str, item_ids: list[int] = ()) -> None:
+def turn_intent(graph_input: Any, values: dict) -> str | None:
+    """The intent to store on the assistant's reply (for /analytics/intents): only for a NEW
+    message. A resumed run (the answer after "yes"/"no") belongs to a turn already counted.
+    A turn that failed before understand_request finished has no intent ('' → None)."""
+    return None if isinstance(graph_input, Command) else (values.get('intent') or None)
+
+
+async def save_message(session_id: int, role: str, content: str, item_ids: list[int] = (),
+                       intent: str | None = None) -> None:
     """A history row + bump the session's updated_at (so the chat list is sorted by activity)."""
     async with SessionLocal() as db:
-        db.add(ChatMessage(session_id=session_id, role=role, content=content, inventory_item_ids=list(item_ids)))
+        db.add(ChatMessage(session_id=session_id, role=role, content=content, inventory_item_ids=list(item_ids),
+                           intent=intent or None))
         await db.execute(update(ChatSession).where(ChatSession.id == session_id).values(updated_at=func.now()))
         await db.commit()
 
@@ -206,16 +216,17 @@ async def _stream_turn(graph, graph_input: Any, config: RunnableConfig, session_
 
         values = (await graph.aget_state(config)).values
         tag_with_intent(config, values)
+        intent = turn_intent(graph_input, values)
 
         if question is not None:
             item = question.get('inventory_item_id')
-            await save_message(session_id, 'assistant', question['question'], [item] if item else [])
+            await save_message(session_id, 'assistant', question['question'], [item] if item else [], intent)
             yield sse(question)
             yield sse(DONE)
             return
 
         cards = answer_cards(values)
-        await save_message(session_id, 'assistant', values['answer'], [c['id'] for c in cards])
+        await save_message(session_id, 'assistant', values['answer'], [c['id'] for c in cards], intent)
         yield sse({'type': 'answer', 'message': values['answer'], 'items': cards,
                    'action_result': values.get('action_result')})
     except Exception as error:                               # LLM timeout / 429 / DB: never a broken stream
@@ -227,7 +238,7 @@ async def _stream_turn(graph, graph_input: Any, config: RunnableConfig, session_
         tag_with_intent(config, values)                      # failed runs are filterable by intent too
         message = error_message(error, values)
         try:
-            await save_message(session_id, 'assistant', message)
+            await save_message(session_id, 'assistant', message, intent=turn_intent(graph_input, values))
         except Exception:
             logger.exception('Could not save the error message for chat session %s', session_id)
         yield sse({'type': 'error', 'message': message})
