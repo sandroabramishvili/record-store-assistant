@@ -13,40 +13,17 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import InventoryItem, Reservation, User
-
-HOLD_HOURS = 48
-MAX_ACTIVE = 3
-
-
-# ---------- errors ----------
-# Plain exceptions, not HTTPException: the same service is used by the API (→ 409/404)
-# and by the chat graph (→ a friendly sentence). Each caller translates them.
-
-
-class ReservationError(Exception):
-    """Base class. `str(error)` is a message that can be shown to the customer."""
-
-
-class ReservationConflict(ReservationError):
-    def __init__(self) -> None:
-        super().__init__('Sorry, someone just reserved that copy (or it was sold).')
-
-
-class ReservationLimitReached(ReservationError):
-    def __init__(self) -> None:
-        super().__init__(f'You already have {MAX_ACTIVE} active reservations. '
-                         'Pick one up or cancel one to reserve another.')
-
-
-class ItemNotFound(ReservationError):
-    def __init__(self) -> None:
-        super().__init__('That copy does not exist.')
-
-
-class ReservationNotActive(ReservationError):
-    def __init__(self, status: str) -> None:
-        self.status = status
-        super().__init__(f'This reservation is already {status}.')
+# Constants and errors live in a pure module (the graph imports them without the DB);
+# re-exported here so existing imports keep working.
+from app.services.reservation_rules import (  # noqa: F401
+    HOLD_HOURS,
+    MAX_ACTIVE,
+    ItemNotFound,
+    ReservationConflict,
+    ReservationError,
+    ReservationLimitReached,
+    ReservationNotActive,
+)
 
 
 async def release_expired(db: AsyncSession) -> list[int]:

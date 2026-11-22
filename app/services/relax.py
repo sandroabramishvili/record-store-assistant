@@ -3,7 +3,7 @@
 Only SOFT constraints from the request are relaxed. Hard rules (stock, ownership,
 profile budget_cap, min_condition) are never touched: they aren't even in this dict,
 and the fields that are hard here (min_condition, include_owned, format, artists,
-original_pressing_only) are copied unchanged.
+titles, original_pressing_only) are copied unchanged.
 """
 
 import copy

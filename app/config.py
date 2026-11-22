@@ -20,11 +20,21 @@ class Settings(BaseSettings):
     # Gemini
     google_api_key: str
     chat_model: str = 'gemini-3.5-flash'
+    # How much the model "thinks" before answering (Gemini 3+): minimal/low/medium/high.
+    # Our tasks (classify a request, write a short answer from given data) need little;
+    # lower = faster and cheaper. Empty = the model's default.
+    chat_thinking_level: str | None = 'low'
+    llm_timeout_seconds: float = 30
     embedding_model: str = 'models/gemini-embedding-001'
     # gemini-embedding-001 returns 3072 numbers by default; it can be shortened
     # (Matryoshka training) with little quality loss. 768 = 4x smaller, and below
     # pgvector's 2000-dimension limit for an HNSW index. Changing it requires re-indexing.
     embedding_dimensions: int = 768
+    # Knowledge search (spec 8.9): chunks below this cosine similarity are ignored, so the
+    # assistant says "I don't know" instead of answering from an unrelated article.
+    # Measured on our articles: real questions ~0.75-0.80, off-topic ~0.48.
+    knowledge_min_score: float = 0.6
+    knowledge_top_k: int = 3
 
     # Observability
     langsmith_project: str = 'record-store-assistant'

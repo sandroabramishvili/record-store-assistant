@@ -84,6 +84,17 @@ def test_context_mention_without_claim_passes():
     assert check(msg, catalog_titles=CATALOG_TITLES) == []
 
 
+@pytest.mark.parametrize('honest', [
+    "We don't have Kind of Blue in stock right now.",
+    'Kind of Blue is not available at the moment.',
+    'Sadly Kind of Blue is sold out.',
+    "Kind of Blue isn't available, but Head Hunters is a great pick.",
+])
+def test_denying_stock_is_not_a_false_claim(honest):
+    """Found in the first real graph run: "not available" was flagged as a stock claim."""
+    assert check(honest, featured=[], catalog_titles=CATALOG_TITLES) == []
+
+
 def test_title_found_despite_different_spelling():
     """Normalization at work: 'KIND OF BLUE' and 'Kind Of Blue' are the same title."""
     assert check('KIND OF BLUE is available today!', catalog_titles=CATALOG_TITLES) != []

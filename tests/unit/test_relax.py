@@ -4,12 +4,12 @@ import pytest
 
 from app.services.relax import MAX_RELAX_ATTEMPTS, relax_constraints
 
-HARD_FIELDS = ['min_condition', 'include_owned', 'format', 'artists', 'original_pressing_only']
+HARD_FIELDS = ['min_condition', 'include_owned', 'format', 'artists', 'titles', 'original_pressing_only']
 
 
 def request(**overrides):
     base = {
-        'artists': [], 'genres': ['jazz-funk'], 'similar_to': None, 'decade': 1970,
+        'artists': [], 'titles': ['Head Hunters'], 'genres': ['jazz-funk'], 'similar_to': None, 'decade': 1970,
         'max_price': 40.0, 'min_condition': 'VG+', 'format': 'LP',
         'original_pressing_only': True, 'include_owned': False, 'query_text': '70s jazz-funk',
     }

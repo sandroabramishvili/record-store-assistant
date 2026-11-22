@@ -32,7 +32,7 @@ BATCH_SIZE = 25
 MAX_RETRIES = 5
 
 
-def _retry_delay(error: Exception) -> float | None:
+def rate_limit_delay(error: Exception) -> float | None:
     """Seconds to wait if this is a rate-limit error (Gemini says how long), else None."""
     message = str(error)
     if '429' not in message and 'RESOURCE_EXHAUSTED' not in message:
@@ -47,7 +47,7 @@ async def with_rate_limit_retry[T](make_call: Callable[[], Awaitable[T]], *, sle
         try:
             return await make_call()
         except Exception as error:
-            delay = _retry_delay(error)
+            delay = rate_limit_delay(error)
             if delay is None or attempt == MAX_RETRIES:
                 raise
             logger.warning('Embedding rate limit reached; waiting %.0f s (attempt %d/%d)', delay, attempt, MAX_RETRIES)

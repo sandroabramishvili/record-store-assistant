@@ -24,6 +24,13 @@ STOCK_CLAIM_RE = re.compile(
     r"\b(in stock|available|we have|we've got|we carry|for sale|on the shelf|you can (?:buy|reserve))\b",
     re.IGNORECASE,
 )
+# A sentence that DENIES stock ("we don't have Nevermind right now", "it's not available")
+# is honest, not a false claim. Found in the first real graph run (Phase 10.4).
+NEGATION_RE = re.compile(
+    r"\b(not|no|never|don't|doesn't|isn't|aren't|wasn't|haven't|hasn't|can't|cannot|no longer|sold out|out of stock)\b"
+    r"|n't\b",
+    re.IGNORECASE,
+)
 _SENTENCE_SPLIT = re.compile(r'(?<=[.!?])\s+|\n+')
 MIN_TITLE_LENGTH = 4  # very short titles ("Low", "Ok") match ordinary words too often
 
@@ -75,7 +82,7 @@ def unsupported_stock_claims(
     """
     issues = []
     for sentence in _SENTENCE_SPLIT.split(message):
-        if not STOCK_CLAIM_RE.search(sentence):
+        if not STOCK_CLAIM_RE.search(sentence) or NEGATION_RE.search(sentence):
             continue
         padded = f' {normalize_name(sentence)} '
         for title, record_ids in catalog_titles.items():
