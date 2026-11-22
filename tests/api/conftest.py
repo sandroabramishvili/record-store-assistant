@@ -72,6 +72,9 @@ async def clean_db():
         # PGVector's tables (they exist once any test has used a vector store).
         if await conn.scalar(text("SELECT to_regclass('langchain_pg_collection')")):
             await conn.execute(text('TRUNCATE langchain_pg_collection CASCADE'))
+        # LangGraph's checkpoint tables (exist once a chat test has opened the checkpointer).
+        if await conn.scalar(text("SELECT to_regclass('checkpoints')")):
+            await conn.execute(text('TRUNCATE checkpoints, checkpoint_blobs, checkpoint_writes'))
     yield
     # Each test has its own event loop; pooled connections can't be reused in the next one.
     await vectorstores.close_vector_stores()

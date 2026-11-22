@@ -17,8 +17,10 @@ class Settings(BaseSettings):
     jwt_secret: str
     jwt_expire_minutes: int = 60
 
-    # Gemini
-    google_api_key: str
+    # Gemini. Optional at import time, so the app (and every test, migration, script that
+    # needs no AI) works without it; building a real Gemini model without it fails clearly
+    # (`gemini_api_key()`). The test suite blanks it on purpose (tests/conftest.py).
+    google_api_key: str = ''
     chat_model: str = 'gemini-3.5-flash'
     # How much the model "thinks" before answering (Gemini 3+): minimal/low/medium/high.
     # Our tasks (classify a request, write a short answer from given data) need little;
@@ -39,6 +41,12 @@ class Settings(BaseSettings):
     # Observability
     langsmith_project: str = 'record-store-assistant'
     environment: str = 'dev'
+
+    def gemini_api_key(self) -> str:
+        """The key, for code that builds a real Gemini client. Missing → a clear error, not a 400 from Google."""
+        if not self.google_api_key:
+            raise RuntimeError('GOOGLE_API_KEY is not set: add it to .env to use Gemini (tests never need it).')
+        return self.google_api_key
 
     @property
     def psycopg_url(self) -> str:

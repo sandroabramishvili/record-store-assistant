@@ -33,7 +33,7 @@ _embeddings_override: Embeddings | None = None
 def _gemini_embeddings() -> GoogleGenerativeAIEmbeddings:
     return GoogleGenerativeAIEmbeddings(
         model=settings.embedding_model,
-        google_api_key=settings.google_api_key,
+        google_api_key=settings.gemini_api_key(),
         output_dimensionality=settings.embedding_dimensions,
         # task_type is deliberately NOT set: the library then uses RETRIEVAL_DOCUMENT
         # when storing and RETRIEVAL_QUERY when searching, which matches better.

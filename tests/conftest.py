@@ -1,5 +1,7 @@
 """Loaded by pytest before any test module, and therefore before `app` is imported.
 
+No Gemini: GOOGLE_API_KEY is blanked for the whole run (see below).
+
 Safety first: point DATABASE_URL at a separate TEST database, so no test can ever
 touch the development data. Settings reads environment variables before `.env`,
 so the whole app (routers, services, SessionLocal) uses the test database.
@@ -30,6 +32,11 @@ def _test_database_url() -> str | None:
         return base
     return url.set(database=f'{url.database}_test').render_as_string(hide_password=False)
 
+
+# Spec 12: no real LLM calls in tests. Blank the Gemini key for the whole run (an empty
+# environment variable beats the real key in .env), so a test that accidentally builds a
+# real Gemini model fails with "GOOGLE_API_KEY is not set" instead of silently calling it.
+os.environ['GOOGLE_API_KEY'] = ''
 
 _url = _test_database_url()
 if _url is not None:

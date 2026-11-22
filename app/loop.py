@@ -12,13 +12,14 @@ On Linux/macOS (and in Docker) the default loop already works and nothing change
 
 import asyncio
 import sys
-from collections.abc import Callable, Coroutine
+from collections.abc import Coroutine
 from typing import Any
 
 
-def selector_loop_factory(use_subprocess: bool = False) -> Callable[[], asyncio.AbstractEventLoop]:
-    """uvicorn's --loop hook: return the loop class to use (Selector on every platform)."""
-    return asyncio.SelectorEventLoop
+def selector_loop_factory() -> asyncio.AbstractEventLoop:
+    """uvicorn's --loop hook. For a custom 'module:attr' uvicorn (0.54) uses the attr AS the
+    loop factory: it is called with no arguments and must return a new loop."""
+    return asyncio.SelectorEventLoop()
 
 
 def run[T](coro: Coroutine[Any, Any, T]) -> T:

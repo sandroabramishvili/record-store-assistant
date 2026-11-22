@@ -1,6 +1,7 @@
 """FastAPI application: creates the app and plugs in the routers.
 
 Run locally (from record-store-assistant/):  uvicorn app.main:app --reload
+(without --reload on Windows add  --loop app.loop:selector_loop_factory : psycopg needs it)
 Swagger UI: http://localhost:8000/docs
 """
 
@@ -10,9 +11,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
+from app.ai.checkpointer import open_checkpointer
+from app.ai.deps import build_deps
+from app.ai.graph import build_graph
 from app.ai.vectorstores import close_vector_stores
 from app.db import engine
-from app.routers import auth, collection, inventory, knowledge, profile, records, reservations, wantlist
+from app.routers import auth, chat, collection, inventory, knowledge, profile, records, reservations, wantlist
 from app.services.reservations import ItemNotFound, ReservationError
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
@@ -20,9 +24,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup work goes before `yield` (Phase 11: LangGraph checkpointer).
-    yield
-    # Shutdown: close all pooled DB connections cleanly.
+    # Startup: the checkpointer (Postgres pool + tables) and the graph, built ONCE and shared
+    # by all requests. Each chat is kept apart by its thread_id, not by its own graph.
+    async with open_checkpointer() as checkpointer:
+        app.state.graph = build_graph(build_deps(), checkpointer)
+        yield
+        app.state.graph = None
+    # Shutdown (the checkpointer pool is closed above): close the other pooled connections.
     await close_vector_stores()
     await engine.dispose()
 
@@ -37,6 +45,7 @@ app.include_router(collection.router)
 app.include_router(wantlist.router)
 app.include_router(reservations.router)
 app.include_router(knowledge.router)
+app.include_router(chat.router)
 
 
 @app.exception_handler(ReservationError)

@@ -25,7 +25,7 @@ STRUCTURED_ATTEMPTS = 3   # invalid JSON / failed validation / transient error â
 def get_chat_model() -> BaseChatModel:
     kwargs = {
         'model': settings.chat_model,
-        'google_api_key': settings.google_api_key,
+        'google_api_key': settings.gemini_api_key(),
         'timeout': settings.llm_timeout_seconds,
         'max_retries': 2,          # network-level retries inside the client
     }
