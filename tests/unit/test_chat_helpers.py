@@ -46,7 +46,8 @@ def test_config_has_thread_and_no_email():
     user = User(id=3, email='alice@example.com', role='customer')
     config = make_config(12, user)
     assert config['configurable']['thread_id'] == 'chat-12'
-    assert 'alice@example.com' not in json.dumps(config)       # spec 9: no emails in traces
+    assert 'alice@example.com' not in json.dumps(config, default=str)   # spec 9: no emails in traces
+    assert make_config(12, user)['run_id'] != config['run_id']          # a new root run per request
 
 
 def test_title_is_shortened_and_single_line():
@@ -57,6 +58,8 @@ def test_title_is_shortened_and_single_line():
 
 def test_error_messages():
     assert 'busy' in error_message(RuntimeError('429 RESOURCE_EXHAUSTED'), {})
-    assert 'unavailable' in error_message(TimeoutError(), {})
+    assert 'busy' in error_message(RuntimeError("503 UNAVAILABLE. {'message': 'high demand'}"), {})
+    assert 'took too long' in error_message(TimeoutError(), {})
+    assert 'unavailable' in error_message(ConnectionError(), {})
     done = error_message(TimeoutError(), {'action_result': {'status': 'reserved', 'label': 'Head Hunters'}})
     assert done.startswith('Your reservation of Head Hunters is confirmed')

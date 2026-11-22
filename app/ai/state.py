@@ -32,6 +32,7 @@ class StoreState(TypedDict, total=False):
     constraints: dict                # what the search currently uses (relax_constraints loosens it)
     refers_to_previous: bool
     reference_index: int | None      # "the second one" → 2
+    reserve_requested: bool          # + "reserve X" with nothing shown → searched first (Phase 14)
 
     # ---- loaded from the database (load_context) ----
     profile: dict                    # favorite/disliked genres, budget_cap, min_condition
@@ -63,6 +64,7 @@ class StoreState(TypedDict, total=False):
 # per request; `shown_item_ids` is deliberately NOT here: it must survive to the next turn.
 TURN_RESET: dict[str, Any] = {
     'intent': '', 'request_constraints': {}, 'constraints': {}, 'refers_to_previous': False, 'reference_index': None,
+    'reserve_requested': False,
     'profile': {}, 'collection': [], 'wantlist_artists': [],
     'candidates': [], 'available_items': [], 'relax_attempts': 0,
     'knowledge_chunks': [], 'catalog_details': [],

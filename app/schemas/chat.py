@@ -22,10 +22,13 @@ class SessionOut(BaseModel):
     updated_at: datetime
 
 
+MAX_MESSAGE_CHARS = 1000   # spec 11 cost control: longer → 422 before anything runs
+
+
 class MessageIn(BaseModel):
     """One customer message. The user and the thread come from the token and the URL, never the body."""
 
-    content: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)]
+    content: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=MAX_MESSAGE_CHARS)]
 
 
 class ConfirmIn(BaseModel):

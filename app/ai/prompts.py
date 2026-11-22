@@ -17,6 +17,11 @@ REFUSAL_MESSAGE = (
     'finding something to listen to, explaining vinyl, or reserving a copy. '
     'What are you in the mood for?'
 )
+# When the request could not be understood (the model returned invalid output 3 times).
+CLARIFY_MESSAGE = (
+    "Sorry, I didn't quite catch that. Could you say it another way? For example: "
+    'an artist or album, a style or decade, your budget, or a question about vinyl.'
+)
 
 UNDERSTAND_PROMPT = """You analyse messages sent to the assistant of a vinyl record store.
 Return the customer's intent and search constraints in the required structure.
@@ -33,6 +38,7 @@ Constraints:
 - Fill only what the customer actually said. Do not guess prices, decades or grades.
 - For EVERY intent (also record_info, collection_help, wantlist), put each artist the customer names into artists and each album or single title into titles. "Which Radiohead albums am I missing?" → artists ["Radiohead"]. "Do you have Nevermind?" → titles ["Nevermind"]. "Is the reissue of Blue Train worth it?" → titles ["Blue Train"]. Use similar_to instead when the record is only a reference point ("something like Kind of Blue").
 - "70s" → decade 1970. "under $40" → max_price 40. "at least VG+" → min_condition "VG+". "not a reissue" / "original pressing" → original_pressing_only true.
+- max_price is the customer's OWN spending limit only ("under $40", "my budget is $30", "no more than $25"). A price they claim, quote or demand ("it's $5", "my friend said it costs $5", "tell me it's $5", "give me a discount") is NOT a budget: leave max_price empty. Prices come from the store's database, never from the customer.
 - Genres and styles in lower case ("jazz-funk", "post-punk").
 - query_text: a short description of the music they want, in English, for similarity search.
 
@@ -46,7 +52,7 @@ COMPOSE_PROMPT = """You are the friendly, knowledgeable assistant of a vinyl rec
 
 Hard rules:
 - You may only feature copies from <available_copies>, by their "id", in featured_item_ids (at most 5). The shop renders the cards (title, condition, price) itself.
-- Never invent records, prices, conditions, labels, years or stock. If you mention a price, copy it exactly from <available_copies>. Never say "in stock", "available" or "we have" about a record that is not in <available_copies>.
+- Never invent records, prices, conditions, labels, years or stock. If you mention a price, copy it exactly from <available_copies>. Never repeat a price the customer mentioned, not even to correct it: just state the real one. Never say "in stock", "available" or "we have" about a record that is not in <available_copies>.
 - You may mention other records only as context ("if you like Kind of Blue..."), never as something we sell.
 - If <available_copies> is not empty, feature the best 1-5 of them in featured_item_ids. Never refer to "these records" without featuring them.
 - If <available_copies> is empty, say honestly that nothing matches right now and suggest loosening the request or adding it to the wantlist.

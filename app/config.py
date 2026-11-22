@@ -27,6 +27,10 @@ class Settings(BaseSettings):
     # lower = faster and cheaper. Empty = the model's default.
     chat_thinking_level: str | None = 'low'
     llm_timeout_seconds: float = 30
+    # Chat limits (spec 11). One turn = up to 2-3 LLM calls (+ retries), so a hard ceiling for
+    # the whole turn keeps a hanging model from holding the customer's screen for minutes.
+    chat_turn_timeout_seconds: float = 90
+    chat_messages_per_hour: int = 30
     embedding_model: str = 'models/gemini-embedding-001'
     # gemini-embedding-001 returns 3072 numbers by default; it can be shortened
     # (Matryoshka training) with little quality loss. 768 = 4x smaller, and below
@@ -38,7 +42,11 @@ class Settings(BaseSettings):
     knowledge_min_score: float = 0.6
     knowledge_top_k: int = 3
 
-    # Observability
+    # Observability (Phase 13). Read here, NOT by LangChain from os.environ: pydantic-settings
+    # does not export .env to the environment, so app/ai/tracing.py builds the tracer itself.
+    langsmith_tracing: bool = False
+    langsmith_api_key: str = ''
+    langsmith_endpoint: str | None = None          # default: LangSmith's US cloud
     langsmith_project: str = 'record-store-assistant'
     environment: str = 'dev'
 

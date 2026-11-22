@@ -16,15 +16,19 @@ ChatMessage rows (the UI's history) are written here, each in its OWN database s
 the response streams after the endpoint has returned, when the request's session is closed.
 """
 
+import asyncio
 import json
 import logging
+import time
 from collections.abc import AsyncIterator
 from typing import Any
+from uuid import uuid4
 
 from langchain_core.runnables import RunnableConfig
 from sqlalchemy import func, update
 
 from app.ai.indexing import rate_limit_delay
+from app.ai.tracing import tag_run, tracing_callbacks
 from app.config import settings
 from app.db import SessionLocal
 from app.models import ChatMessage, ChatSession, User
@@ -40,13 +44,28 @@ def thread_id(session_id: int) -> str:
 
 
 def make_config(session_id: int, user: User) -> RunnableConfig:
-    """thread_id for the checkpointer + tags/metadata for LangSmith (ids only, never emails)."""
+    """thread_id for the checkpointer + the LangSmith trace setup (ids only, never emails).
+
+    `run_id` is chosen here so the root run can be tagged with the intent afterwards
+    (it is only known once understand_request has run). Tags and metadata are inherited
+    by every node and LLM call, so any of them can be filtered by session in LangSmith.
+    """
     return {
         'configurable': {'thread_id': thread_id(session_id)},
+        'run_id': uuid4(),
         'run_name': 'chat_turn',
+        'callbacks': tracing_callbacks(),
         'tags': ['chat', f'env:{settings.environment}'],
-        'metadata': {'session_id': session_id, 'user_id': user.id, 'role': user.role},
+        'metadata': {'session_id': session_id, 'user_id': user.id, 'role': user.role,
+                     'environment': settings.environment},
     }
+
+
+def tag_with_intent(config: RunnableConfig, values: dict) -> None:
+    """Spec 9: session_id + environment are metadata from the start; the intent becomes a tag
+    (`intent:find_record`) on the root run once the run is over."""
+    intent = values.get('intent') or 'unknown'
+    tag_run(config['run_id'], [*config['tags'], f'intent:{intent}'])
 
 
 def sse(data: dict) -> str:
@@ -92,8 +111,11 @@ async def save_message(session_id: int, role: str, content: str, item_ids: list[
 
 def error_message(error: Exception, values: dict) -> str:
     """A clear message for the customer. Says so if the action already went through before the failure."""
-    if rate_limit_delay(error) is not None:
+    overloaded = '503' in str(error) and 'UNAVAILABLE' in str(error)      # Gemini "high demand" (seen for real)
+    if rate_limit_delay(error) is not None or overloaded:
         text = 'The assistant is busy right now (too many requests). Your message is saved; please try again in a minute.'
+    elif isinstance(error, TimeoutError):
+        text = 'The assistant took too long to answer. Your message is saved; please try again.'
     else:
         text = 'The assistant is unavailable right now. Your message is saved; please try again in a moment.'
     done = values.get('action_result') or {}
@@ -104,19 +126,86 @@ def error_message(error: Exception, values: dict) -> str:
     return text
 
 
-async def stream_turn(graph, graph_input: Any, config: RunnableConfig, session_id: int) -> AsyncIterator[str]:
-    """Run the graph (a new message, or Command(resume=...)) and yield SSE events."""
+# ---------- one run per chat at a time ----------
+#
+# Two requests for the same chat must not run the graph at the same time: a double-clicked
+# "Confirm" would resume the same pause twice (the 2nd reservation then fails and the
+# customer sees "failed" for a hold that worked). In-process registry: correct for the one
+# uvicorn worker this app runs with (Docker, Phase 17). With several workers it would need a
+# Postgres advisory lock instead.
+_busy: dict[int, float] = {}           # session id → monotonic time its run started
+
+
+def busy_stale_after() -> float:
+    """A claim older than this is ignored: covers a response that was never streamed (the
+    client left before the body started), so a chat can't stay locked forever."""
+    return settings.chat_turn_timeout_seconds + 30
+
+
+def claim_session(session_id: int) -> bool:
+    """True and marks the chat busy; False if a run for it is still going. No await inside:
+    check-and-set is atomic on the event loop."""
+    now = time.monotonic()
+    started = _busy.get(session_id)
+    if started is not None and now - started < busy_stale_after():
+        return False
+    _busy[session_id] = now
+    return True
+
+
+def release_session(session_id: int) -> None:
+    _busy.pop(session_id, None)
+
+
+async def _updates_with_deadline(graph, graph_input: Any, config: RunnableConfig, timeout: float):
+    """graph.astream(updates), but the WHOLE turn must finish within `timeout` seconds.
+
+    The deadline wraps only the `await` for the next update, never a `yield`, and runs in the
+    same task (no wait_for → no new task), so LangGraph's context is untouched. On timeout
+    asyncio raises TimeoutError, handled like any other failure (message kept, clear error).
+    """
+    stream = graph.astream(graph_input, config, stream_mode='updates')
+    deadline = asyncio.get_running_loop().time() + timeout
+    try:
+        while True:
+            try:
+                async with asyncio.timeout_at(deadline):
+                    update = await anext(stream)
+            except StopAsyncIteration:
+                return
+            yield update
+    finally:
+        await stream.aclose()
+
+
+async def stream_turn(graph, graph_input: Any, config: RunnableConfig, session_id: int,
+                      *, timeout: float | None = None) -> AsyncIterator[str]:
+    """Run the graph (a new message, or Command(resume=...)) and yield SSE events.
+    Releases the chat's busy claim (claim_session) when it ends, however it ends."""
+    try:
+        async for event in _stream_turn(graph, graph_input, config, session_id,
+                                        settings.chat_turn_timeout_seconds if timeout is None else timeout):
+            yield event
+    finally:
+        release_session(session_id)
+
+
+async def _stream_turn(graph, graph_input: Any, config: RunnableConfig, session_id: int,
+                       timeout: float) -> AsyncIterator[str]:
     try:
         question = None
         # Always consume the stream to its END, even after the interrupt: leaving the loop
         # early closes the run before the checkpointer has written the paused state
         # (the Postgres saver writes in the background), and the confirmation would be lost.
-        async for update in graph.astream(graph_input, config, stream_mode='updates'):
+        async for update in _updates_with_deadline(graph, graph_input, config, timeout):
             for node, payload in update.items():
                 if node == '__interrupt__':                  # paused in confirm_action
                     question = payload[0].value
                 else:
                     yield sse({'type': 'node', 'name': node})
+
+        values = (await graph.aget_state(config)).values
+        tag_with_intent(config, values)
 
         if question is not None:
             item = question.get('inventory_item_id')
@@ -125,7 +214,6 @@ async def stream_turn(graph, graph_input: Any, config: RunnableConfig, session_i
             yield sse(DONE)
             return
 
-        values = (await graph.aget_state(config)).values
         cards = answer_cards(values)
         await save_message(session_id, 'assistant', values['answer'], [c['id'] for c in cards])
         yield sse({'type': 'answer', 'message': values['answer'], 'items': cards,
@@ -136,6 +224,7 @@ async def stream_turn(graph, graph_input: Any, config: RunnableConfig, session_i
             values = (await graph.aget_state(config)).values
         except Exception:
             values = {}
+        tag_with_intent(config, values)                      # failed runs are filterable by intent too
         message = error_message(error, values)
         try:
             await save_message(session_id, 'assistant', message)

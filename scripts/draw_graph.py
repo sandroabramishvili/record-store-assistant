@@ -8,6 +8,8 @@ GitHub renders ```mermaid blocks, so docs/graph.md (and the README) show it as a
 
 from pathlib import Path
 
+from langchain_core.runnables import RunnableLambda
+
 from app.ai.deps import Deps
 from app.ai.graph import build_graph
 
@@ -18,10 +20,9 @@ class _NoLLM:
     """Drawing needs the structure only; no model is ever called."""
 
     def with_structured_output(self, schema):
-        return self
-
-    def with_retry(self, **kwargs):
-        return self
+        def never_called(_messages):
+            raise AssertionError('draw_graph never runs the model')
+        return RunnableLambda(never_called)
 
 
 def mermaid() -> str:

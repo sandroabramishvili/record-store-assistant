@@ -37,6 +37,8 @@ def _test_database_url() -> str | None:
 # environment variable beats the real key in .env), so a test that accidentally builds a
 # real Gemini model fails with "GOOGLE_API_KEY is not set" instead of silently calling it.
 os.environ['GOOGLE_API_KEY'] = ''
+# Same for LangSmith: test runs must not end up as traces in the real project.
+os.environ['LANGSMITH_TRACING'] = 'false'
 
 _url = _test_database_url()
 if _url is not None:

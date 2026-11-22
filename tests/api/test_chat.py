@@ -7,15 +7,21 @@ Only the LLM is fake (spec 12). Covers the Phase 11 "Done when" list:
 plus: 409 rules, the LLM-failure path (message kept, clear error), and delete removing checkpoints.
 """
 
+import asyncio
 import json
+import time
+from datetime import timedelta
 
 import pytest_asyncio
-from sqlalchemy import select, text
+from sqlalchemy import func, select, text
 
+from app.ai.chat import claim_session, release_session
 from app.ai.checkpointer import open_checkpointer
 from app.ai.deps import Deps
 from app.ai.graph import build_graph
-from app.ai.schemas import AnswerDraft
+from app.ai.schemas import AnswerDraft, RequestAnalysis
+from app.config import settings
+from app.schemas.chat import MAX_MESSAGE_CHARS
 from app.ai.vectorstores import get_knowledge_store, get_record_store
 from app.auth.security import create_access_token
 from app.db import SessionLocal, engine
@@ -24,7 +30,7 @@ from app.models import ChatMessage, Reservation, User
 from app.repositories.store import StoreRepository
 from scripts.seed_catalog import seed_catalog
 from tests.api.test_graph_db import JAZZ_FUNK, understood
-from tests.graph.fakes import FakeLLM, feature_available
+from tests.graph.fakes import FakeLLM, Reply, feature_available
 
 
 def make_graph(llm, checkpointer):
@@ -178,7 +184,7 @@ async def test_list_is_mine_newest_activity_first(client, llm, jazz_fan):
 
 async def test_llm_failure_keeps_the_message_and_says_so(client, llm, jazz_fan):
     sid = await new_chat(client, jazz_fan)
-    llm.add(*[TimeoutError('gemini timed out')] * 3)                          # all retries fail
+    llm.add(TimeoutError('gemini timed out'))                                 # network errors: not retried by us
     out = events(await say(client, jazz_fan, sid, 'Any Coltrane?'))
     assert [e['type'] for e in out][-2:] == ['error', 'done']
     assert 'Your message is saved' in out[-2]['message']
@@ -196,16 +202,77 @@ async def test_failure_after_the_reservation_tells_the_customer_it_went_through(
     sid, second = await search_then_hold_second(client, jazz_fan, llm)
     error = RuntimeError('429 RESOURCE_EXHAUSTED')
     error.schema = AnswerDraft
-    llm.add(error, error, error)
+    llm.add(error)
     done = events(await client.post(f'/chat/sessions/{sid}/confirm', headers=jazz_fan, json={'approved': True}))
     message = next(e for e in done if e['type'] == 'error')['message']
     assert 'reservation' in message and 'confirmed' in message and 'too many requests' in message
     assert len(await reservations_for(second)) == 1
 
 
-async def test_blank_message_is_rejected(client, llm, jazz_fan):
+async def test_blank_or_too_long_message_is_rejected(client, llm, jazz_fan):
     sid = await new_chat(client, jazz_fan)
     assert (await say(client, jazz_fan, sid, '   ')).status_code == 422
+    assert (await say(client, jazz_fan, sid, 'x' * (MAX_MESSAGE_CHARS + 1))).status_code == 422
+    assert llm.calls == []
+
+
+# ---------- Phase 14: limits ----------
+
+
+async def add_user_messages(sid: int, count: int, age: timedelta = timedelta(0)) -> None:
+    async with SessionLocal() as db:
+        for n in range(count):
+            db.add(ChatMessage(session_id=sid, role='user', content=f'old {n}',
+                               created_at=func.now() - age))           # DB clock, like the limit itself
+        await db.commit()
+
+
+async def test_rate_limit_counts_the_last_hour_across_all_chats(client, llm, jazz_fan):
+    limit = settings.chat_messages_per_hour
+    first, second = await new_chat(client, jazz_fan), await new_chat(client, jazz_fan)
+    await add_user_messages(first, limit, age=timedelta(hours=2))          # outside the window: don't count
+    await add_user_messages(first, limit - 1, age=timedelta(minutes=50))   # inside, in ANOTHER chat
+
+    llm.add(understood('off_topic'))
+    assert any(e['type'] == 'answer' for e in events(await say(client, jazz_fan, second, 'weather?')))  # = the limit
+
+    r = await say(client, jazz_fan, second, 'one more?')
+    assert r.status_code == 429
+    assert 500 < int(r.headers['Retry-After']) <= 600                       # oldest counted one leaves in ~10 min
+    messages = (await client.get(f'/chat/sessions/{second}/messages', headers=jazz_fan)).json()['messages']
+    assert [m['content'] for m in messages if m['role'] == 'user'] == ['weather?']   # the 429'd one isn't saved
+
+
+async def test_one_run_per_chat_at_a_time(client, llm, jazz_fan):
+    """A double-clicked send / confirm: the 2nd request gets 409 while the 1st is running."""
+    sid = await new_chat(client, jazz_fan)
+    assert claim_session(sid)                                   # a run is in progress for this chat
+    try:
+        r = await say(client, jazz_fan, sid, 'weather?')
+        assert r.status_code == 409 and 'Still answering' in r.json()['detail']
+    finally:
+        release_session(sid)
+    llm.add(understood('off_topic'))
+    events(await say(client, jazz_fan, sid, 'weather?'))       # free again
+    assert claim_session(sid)                                   # ...and released after the stream ended
+    release_session(sid)
+
+
+async def test_a_hanging_model_hits_the_turn_deadline(client, llm, jazz_fan, monkeypatch):
+    monkeypatch.setattr(settings, 'chat_turn_timeout_seconds', 0.5)
+
+    async def hang(_messages):
+        await asyncio.sleep(30)
+
+    sid = await new_chat(client, jazz_fan)
+    llm.add(Reply(RequestAnalysis, hang))
+    started = time.monotonic()
+    out = events(await say(client, jazz_fan, sid, 'Any Coltrane?'))
+    assert time.monotonic() - started < 5                        # not 30 s
+    assert out[-2]['type'] == 'error' and 'took too long' in out[-2]['message']
+
+    llm.add(understood('off_topic'))                             # the chat is usable right after
+    assert any(e['type'] == 'answer' for e in events(await say(client, jazz_fan, sid, 'Any Coltrane?')))
 
 
 # ---------- delete ----------

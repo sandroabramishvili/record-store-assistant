@@ -23,6 +23,8 @@ from app.ai.deps import build_deps
 from app.ai.graph import build_graph
 from app.ai.indexing import rate_limit_delay
 from app.ai.state import new_turn_input
+from app.ai.tracing import flush_traces, tracing_callbacks
+from app.config import settings
 from app.ai.vectorstores import close_vector_stores
 from app.db import SessionLocal, engine
 from app.models import User
@@ -100,7 +102,9 @@ async def main(args) -> None:
                 user_id = await db.scalar(select(User.id).where(User.email == email))
             if user_id is None:
                 raise SystemExit(f'No user {email}. Run: python -m scripts.seed')
-            config = {'configurable': {'thread_id': f'try-{email}'}}
+            config = {'configurable': {'thread_id': f'try-{user_id}'}, 'run_name': 'try_graph',
+                      'callbacks': tracing_callbacks(), 'tags': ['try_graph', f'env:{settings.environment}'],
+                      'metadata': {'user_id': user_id, 'environment': settings.environment}}
             print(f'\n===== chatting as {email} =====')
             if script:
                 for text, answer in script:
@@ -121,6 +125,7 @@ async def main(args) -> None:
                 for rid in made:
                     await cancel_reservation(db, rid)
             print(f'\n(cancelled {len(made)} reservation(s) made by this run; use --keep to keep them)')
+        flush_traces()
         await close_vector_stores()
         await engine.dispose()
 

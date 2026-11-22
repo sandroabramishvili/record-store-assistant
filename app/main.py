@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from app.ai.checkpointer import open_checkpointer
 from app.ai.deps import build_deps
 from app.ai.graph import build_graph
+from app.ai.tracing import flush_traces
 from app.ai.vectorstores import close_vector_stores
 from app.db import engine
 from app.routers import auth, chat, collection, inventory, knowledge, profile, records, reservations, wantlist
@@ -30,6 +31,7 @@ async def lifespan(app: FastAPI):
         app.state.graph = build_graph(build_deps(), checkpointer)
         yield
         app.state.graph = None
+    flush_traces()                                   # send LangSmith runs still queued
     # Shutdown (the checkpointer pool is closed above): close the other pooled connections.
     await close_vector_stores()
     await engine.dispose()

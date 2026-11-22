@@ -8,9 +8,13 @@ Rules:
 - Someone else's chat → 404 (same as a missing one).
 - A message while a confirmation is pending → 409: the customer must answer it first.
   (LangGraph would otherwise silently drop the paused action; a 409 makes it explicit.)
+- A request while this chat's previous run is still streaming → 409 (one run per chat).
+- More than CHAT_MESSAGES_PER_HOUR messages in a rolling hour → 429 with Retry-After.
 - The customer's message is saved BEFORE the graph runs, so an LLM failure never loses it.
 """
 
+import math
+from datetime import timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -18,10 +22,20 @@ from fastapi.responses import StreamingResponse
 from langgraph.types import Command
 from sqlalchemy import func, select
 
-from app.ai.chat import SSE_HEADERS, make_config, pending_confirmation, save_message, stream_turn, thread_id
+from app.ai.chat import (
+    SSE_HEADERS,
+    claim_session,
+    make_config,
+    pending_confirmation,
+    release_session,
+    save_message,
+    stream_turn,
+    thread_id,
+)
 from app.ai.state import new_turn_input
 from app.auth.deps import CurrentUser, DbSession
 from app.auth.ownership import get_owned_or_404
+from app.config import settings
 from app.models import ChatMessage, ChatSession, InventoryItem, Record
 from app.schemas.chat import ChatHistory, ChatItem, ConfirmIn, MessageIn, MessageOut, SessionCreate, SessionOut
 from app.schemas.common import Page
@@ -51,6 +65,33 @@ def title_from(text: str) -> str:
 def _stream(graph, graph_input, config, session_id: int) -> StreamingResponse:
     return StreamingResponse(stream_turn(graph, graph_input, config, session_id),
                              media_type='text/event-stream', headers=SSE_HEADERS)
+
+
+def _claim_or_409(session_id: int) -> None:
+    """One graph run per chat at a time (released when the stream ends: stream_turn)."""
+    if not claim_session(session_id):
+        raise HTTPException(status.HTTP_409_CONFLICT, 'Still answering your previous message, one moment.')
+
+
+async def enforce_rate_limit(db: DbSession, user_id: int) -> None:
+    """Spec 11: at most N customer messages per rolling hour, over ALL their chats → 429.
+
+    Counted from ChatMessage rows (role='user'), with the database clock, so it needs no
+    extra table and works the same with several API processes. Retry-After = when the
+    oldest message in the window leaves it.
+    """
+    limit = settings.chat_messages_per_hour
+    window_start = func.now() - timedelta(hours=1)
+    count, oldest_age = (await db.execute(
+        select(func.count(), func.extract('epoch', func.now() - func.min(ChatMessage.created_at)))
+        .join(ChatSession, ChatSession.id == ChatMessage.session_id)
+        .where(ChatSession.user_id == user_id, ChatMessage.role == 'user', ChatMessage.created_at > window_start)
+    )).one()
+    if count >= limit:
+        retry_after = max(1, math.ceil(3600 - float(oldest_age or 0)))
+        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS,
+                            f'You have sent {limit} messages in the last hour. Please try again a little later.',
+                            headers={'Retry-After': str(retry_after)})
 
 
 # ---------- sessions ----------
@@ -131,11 +172,17 @@ async def send_message(session_id: int, body: MessageIn, user: CurrentUser, db: 
     config = make_config(session.id, user)
     if await pending_confirmation(graph, config):
         raise HTTPException(status.HTTP_409_CONFLICT, 'Please confirm or cancel the pending action first.')
+    await enforce_rate_limit(db, user.id)                          # before anything is saved or run
 
-    if session.title == DEFAULT_TITLE:
-        session.title = title_from(body.content)
-        await db.commit()
-    await save_message(session.id, 'user', body.content)          # saved BEFORE the graph runs
+    _claim_or_409(session.id)
+    try:
+        if session.title == DEFAULT_TITLE:
+            session.title = title_from(body.content)
+            await db.commit()
+        await save_message(session.id, 'user', body.content)      # saved BEFORE the graph runs
+    except BaseException:
+        release_session(session.id)
+        raise
     return _stream(graph, new_turn_input(body.content, user.id), config, session.id)
 
 
@@ -147,6 +194,12 @@ async def confirm(session_id: int, body: ConfirmIn, user: CurrentUser, db: DbSes
     config = make_config(session.id, user)
     if not await pending_confirmation(graph, config):
         raise HTTPException(status.HTTP_409_CONFLICT, 'Nothing is waiting for confirmation.')
+    # Not rate-limited: it only answers a question the assistant already asked.
 
-    await save_message(session.id, 'user', 'Yes, please.' if body.approved else 'No, thanks.')
+    _claim_or_409(session.id)                                     # a double click → the 2nd gets 409
+    try:
+        await save_message(session.id, 'user', 'Yes, please.' if body.approved else 'No, thanks.')
+    except BaseException:
+        release_session(session.id)
+        raise
     return _stream(graph, Command(resume={'confirmed': body.approved}), config, session.id)

@@ -6,6 +6,7 @@ FakeRepo — an in-memory StoreRepository with the same method names.
 """
 
 import copy
+import inspect
 from collections import Counter
 from decimal import Decimal
 
@@ -48,7 +49,8 @@ class FakeLLM:
             for i, item in enumerate(self.queue):
                 if isinstance(item, Reply) and item.schema is schema:
                     self.queue.pop(i)
-                    return item.make(messages)
+                    result = item.make(messages)
+                    return await result if inspect.isawaitable(result) else result   # async make: e.g. a hang
                 if isinstance(item, schema) or (isinstance(item, Exception) and getattr(item, 'schema', schema) is schema):
                     self.queue.pop(i)
                     if isinstance(item, Exception):

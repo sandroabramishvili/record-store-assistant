@@ -15,15 +15,16 @@ import logging
 from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
-from langchain_core.messages import AIMessage, AnyMessage
+from langchain_core.messages import AIMessage, AnyMessage, RemoveMessage
 from langgraph.types import interrupt
 
-from app.ai.prompts import REFUSAL_MESSAGE, compose_messages, knowledge_messages, understand_messages
+from app.ai.llm import INVALID_OUTPUT_ERRORS, analyzer, composer
+from app.ai.prompts import CLARIFY_MESSAGE, REFUSAL_MESSAGE, compose_messages, knowledge_messages, understand_messages
 from app.ai.schemas import AnswerDraft, RequestAnalysis
 from app.ai.state import StoreState
 from app.services.availability import filter_available
 from app.services.customer import CustomerContext
-from app.ai.routing import RELAX_EXHAUSTED
+from app.ai.routing import MAX_ANSWER_ATTEMPTS, RELAX_EXHAUSTED
 from app.services.relax import MAX_RELAX_ATTEMPTS, relax_constraints
 from app.services.reservation_rules import HOLD_HOURS, MAX_ACTIVE, ReservationError
 from app.services.verify import verify_draft
@@ -33,8 +34,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-STRUCTURED_ATTEMPTS = 3        # invalid structured output → ask again
 MAX_AVAILABLE = 8              # copies handed to the LLM (it features at most 5)
+MAX_STORED_MESSAGES = 20       # messages kept in the checkpoint (the prompts use far fewer)
+UNCLEAR = 'unclear'            # set by code (never by the LLM) when the request couldn't be parsed
 MAX_CARDS = 5
 # RELAX_EXHAUSTED (from routing): marker that nothing is left to loosen → stop searching
 
@@ -87,11 +89,20 @@ def money_or_none(value: Any) -> Decimal | None:
 # ---------- nodes ----------
 
 
+def keep_recent(state: StoreState, new_message: AIMessage) -> list[AnyMessage]:
+    """The `messages` update that ends a turn: the answer, plus RemoveMessage for the oldest
+    messages beyond MAX_STORED_MESSAGES. The prompts only ever use the last few turns
+    (prompts.HISTORY_TURNS), so older ones only made every checkpoint bigger (spec 4.1)."""
+    stored = state.get('messages') or []
+    overflow = len(stored) + 1 - MAX_STORED_MESSAGES
+    return [RemoveMessage(id=m.id) for m in stored[:max(overflow, 0)] if m.id] + [new_message]
+
+
 class Nodes:
     def __init__(self, deps: 'Deps'):
         self.deps = deps
-        self.analyzer = deps.llm.with_structured_output(RequestAnalysis).with_retry(stop_after_attempt=STRUCTURED_ATTEMPTS)
-        self.composer = deps.llm.with_structured_output(AnswerDraft).with_retry(stop_after_attempt=STRUCTURED_ATTEMPTS)
+        self.analyzer = analyzer(deps.llm)
+        self.composer = composer(deps.llm)
 
     # ---- understanding ----
 
@@ -105,10 +116,26 @@ class Nodes:
             if i in items else '(no longer in the catalog)'
             for i in shown
         ]
-        analysis: RequestAnalysis = await self.analyzer.ainvoke(understand_messages(message, history, last_shown))
+        try:
+            analysis: RequestAnalysis = await self.analyzer.ainvoke(understand_messages(message, history, last_shown))
+        except INVALID_OUTPUT_ERRORS:
+            # Three invalid answers in a row: ask the customer to rephrase (polite_refusal
+            # handles UNCLEAR with a fixed text). Network errors are not caught: they reach
+            # the API, which keeps the message and says "try again".
+            logger.warning('request could not be understood', exc_info=True)
+            return {'intent': UNCLEAR}
         constraints = analysis.constraints.model_dump()
+        intent, reserve_requested = analysis.intent, False
+        if (intent == 'reserve' and analysis.reference_index is None
+                and (constraints.get('titles') or constraints.get('artists'))):
+            # "Do you have Abbey Road? If so, reserve it." names a record but points at no shown
+            # copy. Found in a real run: prepare_reservation (correctly) reserved nothing, and the
+            # answer then claimed "not in stock" without any search. Code decides: search first,
+            # show the copies, and the customer picks one ("the first one") → confirmation.
+            intent, reserve_requested = 'find_record', True
         return {
-            'intent': analysis.intent,
+            'intent': intent,
+            'reserve_requested': reserve_requested,
             'constraints': constraints,
             'request_constraints': copy.deepcopy(constraints),   # the relax loop must not change this one
             'refers_to_previous': analysis.refers_to_previous,
@@ -117,7 +144,8 @@ class Nodes:
 
     async def polite_refusal(self, state: StoreState) -> dict:
         """off_topic, lyrics, downloads: a fixed text, no LLM call (instant, free, predictable)."""
-        return {'answer': REFUSAL_MESSAGE, 'messages': [AIMessage(content=REFUSAL_MESSAGE)]}
+        text = CLARIFY_MESSAGE if state.get('intent') == UNCLEAR else REFUSAL_MESSAGE
+        return {'answer': text, 'messages': keep_recent(state, AIMessage(content=text))}
 
     async def load_context(self, state: StoreState) -> dict:
         """Profile + collection + wantlist artists. user_id comes from the JWT, never the LLM."""
@@ -252,12 +280,20 @@ class Nodes:
         else:
             prompt = compose_messages(message, available=[for_llm(i) for i in state.get('available_items') or []],
                                       history=history, notes=self._notes(state), issues=issues)
-        draft: AnswerDraft = await self.composer.ainvoke(prompt)
+        try:
+            draft: AnswerDraft = await self.composer.ainvoke(prompt)
+        except INVALID_OUTPUT_ERRORS:
+            # No usable draft after 3 attempts: no point in a 2nd compose round, go straight
+            # to fallback_template (a correct answer built from the state by code).
+            logger.warning('no valid answer draft', exc_info=True)
+            return {'draft': None, 'answer_attempts': MAX_ANSWER_ATTEMPTS}
         return {'draft': draft.model_dump(), 'answer_attempts': state.get('answer_attempts', 0) + 1}
 
     async def verify_answer(self, state: StoreState) -> dict:
         """Code checks the draft (ids, prices, stock claims). Pass → final answer; fail → issues."""
         draft = state['draft']
+        if draft is None:                                        # compose_answer gave up (invalid output)
+            return {'answer_issues': ['the model returned no valid answer']}
         text = draft['message'] + (f'\n\n{draft["follow_up_question"]}' if draft.get('follow_up_question') else '')
         allowed = self._verifiable_items(state)
         titles = {title: set(ids) for title, ids in (await self.deps.repo.catalog_titles()).items()}
@@ -310,6 +346,9 @@ class Nodes:
     def _notes(self, state: StoreState) -> list[str]:
         """Facts from code that the answer should mention."""
         notes = relax_notes(state.get('request_constraints') or {}, state.get('constraints') or {})
+        if state.get('reserve_requested') and state.get('available_items'):
+            notes.append('The customer wants to reserve this. Nothing is reserved yet: show the copies and ask '
+                         'which one to hold (e.g. "the first one"); holding it needs their confirmation.')
         if state.get('action_result'):
             notes.append(self._action_sentence(state['action_result']))
         for detail in state.get('catalog_details') or []:
@@ -371,7 +410,7 @@ class Nodes:
         return {
             'answer': text,
             'shown_item_ids': featured or state.get('shown_item_ids') or [],   # keep the old list if nothing new
-            'messages': [AIMessage(content=f'{text}\n\n{listing}' if listing else text)],
+            'messages': keep_recent(state, AIMessage(content=f'{text}\n\n{listing}' if listing else text)),
             'answer_issues': [],
         }
 
