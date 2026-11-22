@@ -60,6 +60,18 @@ class WantlistCreate(BaseModel):
     min_condition: Condition | None = None
 
 
+class WantlistMatch(BaseModel):
+    """The in-stock copy that fulfils a wantlist entry (for the "match!" card)."""
+
+    item_id: int
+    record_id: int
+    artist: str
+    title: str
+    price: Decimal
+    media_condition: str
+    sleeve_condition: str
+
+
 class WantlistItemOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -70,6 +82,7 @@ class WantlistItemOut(BaseModel):
     min_condition: str | None
     matched_item_id: int | None
     created_at: datetime
+    match: WantlistMatch | None = None
 
 
 class WantlistOut(BaseModel):

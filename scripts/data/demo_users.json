@@ -1,0 +1,55 @@
+[
+  {
+    "email": "staff@example.com",
+    "full_name": "Store Staff",
+    "password": "staff-demo-2026",
+    "role": "staff",
+    "profile": {},
+    "collection": [],
+    "wantlist": []
+  },
+  {
+    "email": "jazz.fan@example.com",
+    "full_name": "Jazz Fan (demo)",
+    "password": "jazz-demo-2026",
+    "role": "customer",
+    "profile": {
+      "favorite_genres": ["jazz", "funk", "soul", "jazz-funk", "hard bop"],
+      "disliked_genres": ["hip-hop"],
+      "budget_cap": "60.00",
+      "min_condition": "VG+"
+    },
+    "collection": [
+      {"artist": "Fleetwood Mac", "title": "Rumours"},
+      {"artist": "Miles Davis", "title": "Kind of Blue"},
+      {"artist": "Marvin Gaye", "title": "What's Going On"},
+      {"artist": "Bill Evans Trio", "title": "Sunday at the Village Vanguard"}
+    ],
+    "wantlist": [
+      {"artist": "Donald Byrd", "title": "Black Byrd", "max_price": "40.00", "min_condition": "VG+"},
+      {"artist": "Alice Coltrane", "title": "Journey in Satchidananda", "max_price": "60.00"}
+    ]
+  },
+  {
+    "email": "beat.digger@example.com",
+    "full_name": "Beat Digger (demo)",
+    "password": "beats-demo-2026",
+    "role": "customer",
+    "profile": {
+      "favorite_genres": ["electronic", "hip-hop", "rock", "alternative rock", "idm"],
+      "disliked_genres": ["classical"],
+      "budget_cap": null,
+      "min_condition": "VG"
+    },
+    "collection": [
+      {"artist": "Radiohead", "title": "OK Computer"},
+      {"artist": "radiohead", "title": "the bends"},
+      {"artist": "Daft Punk", "title": "Discovery"},
+      {"artist": "Portishead", "title": "Dummy"}
+    ],
+    "wantlist": [
+      {"artist": "Nirvana", "title": "Nevermind"},
+      {"artist": "Kraftwerk", "title": null, "max_price": "50.00"}
+    ]
+  }
+]

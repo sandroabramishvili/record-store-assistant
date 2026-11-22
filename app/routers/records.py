@@ -1,11 +1,20 @@
-"""Catalog of releases. Everyone logged in can browse; only staff can change it."""
+"""Catalog of releases. Everyone logged in can browse; only staff can change it.
 
+Every change to a release also updates its vector (one per release, id `record-{id}`).
+The DB is the source of truth: it is saved first; if embedding then fails (e.g. Gemini
+is down), the request still succeeds, the error is logged, and the vectors can be
+rebuilt with `python -m scripts.seed_catalog --vectors-only`.
+"""
+
+import logging
 from decimal import Decimal
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, Response, status
 from sqlalchemy import exists, func, or_, select
 
+from app.ai.indexing import delete_record_vector, index_records
+from app.ai.vectorstores import RecordStore
 from app.auth.deps import CurrentUser, DbSession, StaffUser
 from app.models import InventoryItem, Record
 from app.repositories.inventory import has_active_reservation
@@ -16,6 +25,14 @@ from app.services.normalize import normalize_name
 from app.services.reservations import release_expired
 
 router = APIRouter(prefix='/records', tags=['catalog'])
+logger = logging.getLogger(__name__)
+
+
+async def _reindex(store, record: Record) -> None:
+    try:
+        await index_records(store, [record])
+    except Exception:
+        logger.exception('Could not index record %s; run scripts.seed_catalog --vectors-only', record.id)
 
 
 def _apply(record: Record, data: RecordIn) -> None:
@@ -128,31 +145,35 @@ async def get_record(record_id: int, user: CurrentUser, db: DbSession) -> Record
 
 
 @router.post('', response_model=RecordOut, status_code=status.HTTP_201_CREATED)
-async def create_record(data: RecordIn, staff: StaffUser, db: DbSession) -> Record:
+async def create_record(data: RecordIn, staff: StaffUser, db: DbSession, store: RecordStore) -> Record:
     record = Record()
     _apply(record, data)
     db.add(record)
     await db.commit()
-    # TODO Phase 7: index the release in the `records` vector store.
+    await _reindex(store, record)
     return record
 
 
 @router.put('/{record_id}', response_model=RecordOut)
-async def update_record(record_id: int, data: RecordIn, staff: StaffUser, db: DbSession) -> Record:
+async def update_record(record_id: int, data: RecordIn, staff: StaffUser, db: DbSession, store: RecordStore) -> Record:
     record = await _get_record_or_404(db, record_id)
     _apply(record, data)
     await db.commit()
-    # TODO Phase 7: re-index the release (its text changed).
+    await _reindex(store, record)  # same id → the old vector is overwritten
     return record
 
 
 @router.delete('/{record_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_record(record_id: int, staff: StaffUser, db: DbSession) -> Response:
+async def delete_record(record_id: int, staff: StaffUser, db: DbSession, store: RecordStore) -> Response:
     """Deletes the release and all its copies. 409 while any copy is actively reserved."""
     record = await _get_record_or_404(db, record_id)
     if await has_active_reservation(db, record_id=record_id):
         raise HTTPException(status.HTTP_409_CONFLICT, 'A copy of this release is reserved; cancel or complete it first')
     await db.delete(record)  # copies cascade in Postgres; collection links become NULL
     await db.commit()
-    # TODO Phase 7: delete the release's vector.
+    try:
+        await delete_record_vector(store, record_id)
+    except Exception:
+        # A leftover vector is harmless: search joins back to SQL, where the record is gone.
+        logger.exception('Could not delete vector of record %s', record_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

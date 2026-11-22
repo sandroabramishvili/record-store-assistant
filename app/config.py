@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     google_api_key: str
     chat_model: str = 'gemini-3.5-flash'
     embedding_model: str = 'models/gemini-embedding-001'
+    # gemini-embedding-001 returns 3072 numbers by default; it can be shortened
+    # (Matryoshka training) with little quality loss. 768 = 4x smaller, and below
+    # pgvector's 2000-dimension limit for an HNSW index. Changing it requires re-indexing.
+    embedding_dimensions: int = 768
 
     # Observability
     langsmith_project: str = 'record-store-assistant'

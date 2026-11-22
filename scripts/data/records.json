@@ -1,0 +1,1450 @@
+[
+  {
+    "artist": "Miles Davis",
+    "title": "Kind of Blue",
+    "label": "Columbia",
+    "catalog_number": "CS 8163",
+    "release_year": 1959,
+    "original_year": 1959,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["modal", "cool jazz"],
+    "description": "The calmest revolution in jazz: Davis, Coltrane, Cannonball Adderley and Bill Evans improvising over sparse modal sketches. Unhurried, late-night and endlessly replayable. This is an early stereo pressing, the kind collectors hunt for.",
+    "tracklist": [
+      {"position": "A1", "title": "So What"},
+      {"position": "A2", "title": "Freddie Freeloader"},
+      {"position": "A3", "title": "Blue in Green"},
+      {"position": "B1", "title": "All Blues"},
+      {"position": "B2", "title": "Flamenco Sketches"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "420.00", "status": "in_stock", "notes": "Early stereo pressing, light ring wear on the cover."},
+      {"media_condition": "VG", "sleeve_condition": "G+", "price": "190.00", "status": "sold"}
+    ]
+  },
+  {
+    "artist": "Miles Davis",
+    "title": "Kind of Blue",
+    "label": "Columbia/Legacy",
+    "catalog_number": null,
+    "release_year": 2015,
+    "original_year": 1959,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["modal", "cool jazz"],
+    "description": "A modern 180-gram reissue of the modal jazz landmark. Quiet vinyl and an affordable way to own the record every jazz shelf starts with.",
+    "tracklist": [
+      {"position": "A1", "title": "So What"},
+      {"position": "A2", "title": "Freddie Freeloader"},
+      {"position": "A3", "title": "Blue in Green"},
+      {"position": "B1", "title": "All Blues"},
+      {"position": "B2", "title": "Flamenco Sketches"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "32.00", "status": "in_stock"},
+      {"media_condition": "M", "sleeve_condition": "M", "price": "36.00", "status": "in_stock", "notes": "Still sealed."}
+    ]
+  },
+  {
+    "artist": "John Coltrane",
+    "title": "Blue Train",
+    "label": "Blue Note",
+    "catalog_number": "BLP 1577",
+    "release_year": 1957,
+    "original_year": 1957,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["hard bop"],
+    "description": "Coltrane's only Blue Note session as a leader: a three-horn front line, Lee Morgan's bright trumpet and the famous title blues. Muscular hard bop with gorgeous Rudy Van Gelder sound. Original mono pressing, a true rarity.",
+    "tracklist": [
+      {"position": "A1", "title": "Blue Train"},
+      {"position": "A2", "title": "Moment's Notice"},
+      {"position": "B1", "title": "Locomotion"},
+      {"position": "B2", "title": "I'm Old Fashioned"},
+      {"position": "B3", "title": "Lazy Bird"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "950.00", "status": "in_stock", "notes": "Original mono, deep groove. Kept behind the counter."}
+    ]
+  },
+  {
+    "artist": "John Coltrane",
+    "title": "Blue Train",
+    "label": "Blue Note",
+    "catalog_number": null,
+    "release_year": 2022,
+    "original_year": 1957,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["hard bop"],
+    "description": "An audiophile all-analog reissue in a heavy gatefold sleeve. For most listeners it sounds superb and costs a tiny fraction of an original; collectors still chase the 1957 pressing for its history.",
+    "tracklist": [
+      {"position": "A1", "title": "Blue Train"},
+      {"position": "A2", "title": "Moment's Notice"},
+      {"position": "B1", "title": "Locomotion"},
+      {"position": "B2", "title": "I'm Old Fashioned"},
+      {"position": "B3", "title": "Lazy Bird"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "38.00", "status": "in_stock"},
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "38.00", "status": "reserved", "reserved_by": "jazz.fan@example.com"}
+    ]
+  },
+  {
+    "artist": "John Coltrane",
+    "title": "A Love Supreme",
+    "label": "Impulse!",
+    "catalog_number": "A-77",
+    "release_year": 1965,
+    "original_year": 1965,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["spiritual jazz", "modal"],
+    "description": "A four-part suite of devotion and intensity, from a chanted bass motif to Coltrane's searing solos. One of the most personal statements in jazz.",
+    "tracklist": [
+      {"position": "A1", "title": "Acknowledgement"},
+      {"position": "A2", "title": "Resolution"},
+      {"position": "B1", "title": "Pursuance"},
+      {"position": "B2", "title": "Psalm"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "85.00", "status": "in_stock"},
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "140.00", "status": "sold"}
+    ]
+  },
+  {
+    "artist": "Cannonball Adderley",
+    "title": "Somethin' Else",
+    "label": "Blue Note",
+    "catalog_number": "BLP 1595",
+    "release_year": 1958,
+    "original_year": 1958,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["hard bop", "cool jazz"],
+    "description": "Cannonball's date with Miles Davis as a sideman. The slow, smoky 'Autumn Leaves' is the reason many people fall for jazz in the first place.",
+    "tracklist": [
+      {"position": "A1", "title": "Autumn Leaves"},
+      {"position": "A2", "title": "Love for Sale"},
+      {"position": "B1", "title": "Somethin' Else"},
+      {"position": "B2", "title": "One for Daddy-O"},
+      {"position": "B3", "title": "Dancing in the Dark"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "G+", "price": "220.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Art Blakey & The Jazz Messengers",
+    "title": "Moanin'",
+    "label": "Blue Note",
+    "catalog_number": "BLP 4003",
+    "release_year": 1959,
+    "original_year": 1959,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["hard bop", "soul jazz"],
+    "description": "Gospel-tinged call and response, Blakey's thunderous drums and a band that swings hard. If Kind of Blue is midnight, this is the lively hour before it.",
+    "tracklist": [
+      {"position": "A1", "title": "Moanin'"},
+      {"position": "A2", "title": "Are You Real"},
+      {"position": "A3", "title": "Along Came Betty"},
+      {"position": "B1", "title": "The Drum Thunder Suite"},
+      {"position": "B2", "title": "Blues March"},
+      {"position": "B3", "title": "Come Rain or Come Shine"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "160.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Lee Morgan",
+    "title": "The Sidewinder",
+    "label": "Blue Note",
+    "catalog_number": "BST 84157",
+    "release_year": 1964,
+    "original_year": 1964,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["hard bop", "soul jazz"],
+    "description": "A funky, boogaloo-flavoured title track that became a surprise hit, followed by sharp, upbeat hard bop. A great next step for anyone who loves Kind of Blue but wants more swagger.",
+    "tracklist": [
+      {"position": "A1", "title": "The Sidewinder"},
+      {"position": "A2", "title": "Totem Pole"},
+      {"position": "B1", "title": "Gary's Notebook"},
+      {"position": "B2", "title": "Boy, What a Night"},
+      {"position": "B3", "title": "Hocus-Pocus"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "45.00", "status": "in_stock"},
+      {"media_condition": "G+", "sleeve_condition": "G", "price": "18.00", "status": "in_stock", "notes": "Surface noise on quiet passages, plays through."}
+    ]
+  },
+  {
+    "artist": "Charles Mingus",
+    "title": "Mingus Ah Um",
+    "label": "Columbia",
+    "catalog_number": "CS 8171",
+    "release_year": 1959,
+    "original_year": 1959,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["post-bop", "hard bop"],
+    "description": "Raucous gospel shouts, tender ballads and sly satire from jazz's great bassist and composer. Includes the moving tribute 'Goodbye Pork Pie Hat'.",
+    "tracklist": [
+      {"position": "A1", "title": "Better Git It in Your Soul"},
+      {"position": "A2", "title": "Goodbye Pork Pie Hat"},
+      {"position": "A3", "title": "Boogie Stop Shuffle"},
+      {"position": "A4", "title": "Self-Portrait in Three Colors"},
+      {"position": "A5", "title": "Open Letter to Duke"},
+      {"position": "B1", "title": "Bird Calls"},
+      {"position": "B2", "title": "Fables of Faubus"},
+      {"position": "B3", "title": "Pussy Cat Dues"},
+      {"position": "B4", "title": "Jelly Roll"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "70.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Kamasi Washington",
+    "title": "The Epic",
+    "label": "Brainfeeder",
+    "catalog_number": null,
+    "release_year": 2015,
+    "original_year": 2015,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz"],
+    "styles": ["spiritual jazz"],
+    "description": "Nearly three hours of big-band spiritual jazz with choir and strings. Proof that jazz on vinyl is very much alive: cinematic, generous and a lot of fun.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "VG+", "price": "55.00", "status": "in_stock", "notes": "3LP box."}
+    ]
+  },
+  {
+    "artist": "Herbie Hancock",
+    "title": "Head Hunters",
+    "label": "Columbia",
+    "catalog_number": "KC 32731",
+    "release_year": 1973,
+    "original_year": 1973,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz", "funk"],
+    "styles": ["jazz-funk", "fusion"],
+    "description": "Hancock's turn toward funk: long, hypnotic grooves built on synths, clavinet and a tight rhythm section. The record that made jazz-funk a genre.",
+    "tracklist": [
+      {"position": "A1", "title": "Chameleon"},
+      {"position": "A2", "title": "Watermelon Man"},
+      {"position": "B1", "title": "Sly"},
+      {"position": "B2", "title": "Vein Melter"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "38.00", "status": "in_stock"},
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "55.00", "status": "sold"},
+      {"media_condition": "VG", "sleeve_condition": "G+", "price": "22.00", "status": "in_stock", "notes": "Light surface marks, plays with some crackle."}
+    ]
+  },
+  {
+    "artist": "Herbie Hancock",
+    "title": "Head Hunters",
+    "label": "Columbia/Legacy",
+    "catalog_number": null,
+    "release_year": 2015,
+    "original_year": 1973,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz", "funk"],
+    "styles": ["jazz-funk", "fusion"],
+    "description": "A clean modern reissue of the jazz-funk classic. Same grooves, no crackle, half the price of a good original.",
+    "tracklist": [
+      {"position": "A1", "title": "Chameleon"},
+      {"position": "A2", "title": "Watermelon Man"},
+      {"position": "B1", "title": "Sly"},
+      {"position": "B2", "title": "Vein Melter"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "28.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Herbie Hancock",
+    "title": "Thrust",
+    "label": "Columbia",
+    "catalog_number": "PC 32965",
+    "release_year": 1974,
+    "original_year": 1974,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz", "funk"],
+    "styles": ["jazz-funk", "fusion"],
+    "description": "The Head Hunters band one year later: tighter, spacier and full of synthesizer colour. 'Actual Proof' is a drummer's favourite.",
+    "tracklist": [
+      {"position": "A1", "title": "Palm Grease"},
+      {"position": "A2", "title": "Actual Proof"},
+      {"position": "B1", "title": "Butterfly"},
+      {"position": "B2", "title": "Spank-A-Lee"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "22.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Donald Byrd",
+    "title": "Black Byrd",
+    "label": "Blue Note",
+    "catalog_number": "BN-LA047-F",
+    "release_year": 1973,
+    "original_year": 1973,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz", "funk"],
+    "styles": ["jazz-funk", "soul jazz"],
+    "description": "Trumpeter Byrd teams up with producer Larry Mizell for smooth, sunny jazz-funk that later fed countless hip-hop samples.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "32.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Roy Ayers Ubiquity",
+    "title": "Everybody Loves the Sunshine",
+    "label": "Polydor",
+    "catalog_number": null,
+    "release_year": 1976,
+    "original_year": 1976,
+    "country": "US",
+    "format": "LP",
+    "genres": ["jazz", "funk", "soul"],
+    "styles": ["jazz-funk", "soul jazz"],
+    "description": "Warm vibraphone, lazy summer grooves and one of the most sampled title tracks ever. Sounds like a hot afternoon.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "VG+", "price": "36.00", "status": "in_stock"},
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "24.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Marvin Gaye",
+    "title": "What's Going On",
+    "label": "Tamla",
+    "catalog_number": "TS 310",
+    "release_year": 1971,
+    "original_year": 1971,
+    "country": "US",
+    "format": "LP",
+    "genres": ["soul"],
+    "styles": ["sweet soul"],
+    "description": "A seamless song cycle about war, poverty and the planet, sung with heartbreaking tenderness. Soul music growing up.",
+    "tracklist": [
+      {"position": "A1", "title": "What's Going On"},
+      {"position": "A2", "title": "What's Happening Brother"},
+      {"position": "A3", "title": "Flyin' High (In the Friendly Sky)"},
+      {"position": "A4", "title": "Save the Children"},
+      {"position": "A5", "title": "God Is Love"},
+      {"position": "A6", "title": "Mercy Mercy Me (The Ecology)"},
+      {"position": "B1", "title": "Right On"},
+      {"position": "B2", "title": "Wholy Holy"},
+      {"position": "B3", "title": "Inner City Blues (Make Me Wanna Holler)"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "60.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Stevie Wonder",
+    "title": "Songs in the Key of Life",
+    "label": "Tamla",
+    "catalog_number": null,
+    "release_year": 1976,
+    "original_year": 1976,
+    "country": "US",
+    "format": "LP",
+    "genres": ["soul", "funk"],
+    "styles": ["sweet soul"],
+    "description": "A double album plus bonus EP, overflowing with joy, funk and ambition. 'Sir Duke', 'Isn't She Lovely' and 'As' on one set.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "45.00", "status": "in_stock", "notes": "Booklet included, bonus EP present."},
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "65.00", "status": "reserved", "reserved_by": "beat.digger@example.com"}
+    ]
+  },
+  {
+    "artist": "Curtis Mayfield",
+    "title": "Super Fly",
+    "label": "Curtom",
+    "catalog_number": null,
+    "release_year": 1972,
+    "original_year": 1972,
+    "country": "US",
+    "format": "LP",
+    "genres": ["soul", "funk"],
+    "styles": ["soundtrack"],
+    "description": "A film soundtrack that outgrew its film: wah-wah guitars, lush strings and sharp social commentary in Curtis's falsetto.",
+    "tracklist": [
+      {"position": "A1", "title": "Little Child Runnin' Wild"},
+      {"position": "A2", "title": "Pusherman"},
+      {"position": "A3", "title": "Freddie's Dead"},
+      {"position": "A4", "title": "Junkie Chase"},
+      {"position": "B1", "title": "Give Me Your Love (Love Song)"},
+      {"position": "B2", "title": "Eddie You Should Know Better"},
+      {"position": "B3", "title": "No Thing on Me (Cocaine Song)"},
+      {"position": "B4", "title": "Think"},
+      {"position": "B5", "title": "Superfly"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "48.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Parliament",
+    "title": "Mothership Connection",
+    "label": "Casablanca",
+    "catalog_number": "NBLP 7022",
+    "release_year": 1975,
+    "original_year": 1975,
+    "country": "US",
+    "format": "LP",
+    "genres": ["funk"],
+    "styles": ["p-funk"],
+    "description": "George Clinton's space-age funk at its peak: huge horns, rubbery bass and 'Give Up the Funk'. Party records don't get better.",
+    "tracklist": [
+      {"position": "A1", "title": "P. Funk (Wants to Get Funked Up)"},
+      {"position": "A2", "title": "Mothership Connection (Star Child)"},
+      {"position": "A3", "title": "Unfunky UFO"},
+      {"position": "B1", "title": "Supergroovalisticprosifunkstication"},
+      {"position": "B2", "title": "Handcuffs"},
+      {"position": "B3", "title": "Give Up the Funk (Tear the Roof off the Sucker)"},
+      {"position": "B4", "title": "Night of the Thumpasorus Peoples"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "40.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Aretha Franklin",
+    "title": "Lady Soul",
+    "label": "Atlantic",
+    "catalog_number": "SD 8176",
+    "release_year": 1968,
+    "original_year": 1968,
+    "country": "US",
+    "format": "LP",
+    "genres": ["soul"],
+    "styles": ["southern soul"],
+    "description": "The Queen of Soul in full command: 'Chain of Fools', '(You Make Me Feel Like) A Natural Woman' and gospel fire throughout.",
+    "tracklist": [
+      {"position": "A1", "title": "Chain of Fools"},
+      {"position": "A2", "title": "Money Won't Change You"},
+      {"position": "A3", "title": "People Get Ready"},
+      {"position": "A4", "title": "Niki Hoeky"},
+      {"position": "A5", "title": "(You Make Me Feel Like) A Natural Woman"},
+      {"position": "B1", "title": "Since You've Been Gone (Sweet Sweet Baby)"},
+      {"position": "B2", "title": "Good to Me as I Am to You"},
+      {"position": "B3", "title": "Come Back Baby"},
+      {"position": "B4", "title": "Groovin'"},
+      {"position": "B5", "title": "Ain't No Way"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "35.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Fela Kuti & Africa 70",
+    "title": "Zombie",
+    "label": "Coconut",
+    "catalog_number": null,
+    "release_year": 1976,
+    "original_year": 1976,
+    "country": "Nigeria",
+    "format": "LP",
+    "genres": ["funk", "world"],
+    "styles": ["afrobeat"],
+    "description": "Relentless Afrobeat groove and biting satire of military obedience. Long, hypnotic tracks built for dancing and protest at the same time.",
+    "tracklist": [
+      {"position": "A1", "title": "Zombie"},
+      {"position": "B1", "title": "Mr. Follow Follow"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "G+", "price": "75.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "The Beatles",
+    "title": "Abbey Road",
+    "label": "Apple",
+    "catalog_number": "PCS 7088",
+    "release_year": 1969,
+    "original_year": 1969,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["pop rock"],
+    "description": "The last album the Beatles recorded together, closing with the famous side-two medley. Warm, polished and full of Harrison's best songs. UK original pressing.",
+    "tracklist": [
+      {"position": "A1", "title": "Come Together"},
+      {"position": "A2", "title": "Something"},
+      {"position": "A3", "title": "Maxwell's Silver Hammer"},
+      {"position": "A4", "title": "Oh! Darling"},
+      {"position": "A5", "title": "Octopus's Garden"},
+      {"position": "A6", "title": "I Want You (She's So Heavy)"},
+      {"position": "B1", "title": "Here Comes the Sun"},
+      {"position": "B2", "title": "Because"},
+      {"position": "B3", "title": "You Never Give Me Your Money"},
+      {"position": "B4", "title": "Sun King"},
+      {"position": "B5", "title": "Mean Mr. Mustard"},
+      {"position": "B6", "title": "Polythene Pam"},
+      {"position": "B7", "title": "She Came In Through the Bathroom Window"},
+      {"position": "B8", "title": "Golden Slumbers"},
+      {"position": "B9", "title": "Carry That Weight"},
+      {"position": "B10", "title": "The End"},
+      {"position": "B11", "title": "Her Majesty"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "90.00", "status": "in_stock"},
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "150.00", "status": "sold"}
+    ]
+  },
+  {
+    "artist": "The Beatles",
+    "title": "Abbey Road",
+    "label": "Apple",
+    "catalog_number": null,
+    "release_year": 2019,
+    "original_year": 1969,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["pop rock"],
+    "description": "The 50th-anniversary edition with a new stereo mix: clearer vocals and punchier drums than the old masters. A great first copy.",
+    "tracklist": [
+      {"position": "A1", "title": "Come Together"},
+      {"position": "A2", "title": "Something"},
+      {"position": "A3", "title": "Maxwell's Silver Hammer"},
+      {"position": "A4", "title": "Oh! Darling"},
+      {"position": "A5", "title": "Octopus's Garden"},
+      {"position": "A6", "title": "I Want You (She's So Heavy)"},
+      {"position": "B1", "title": "Here Comes the Sun"},
+      {"position": "B2", "title": "Because"},
+      {"position": "B3", "title": "You Never Give Me Your Money"},
+      {"position": "B4", "title": "Sun King"},
+      {"position": "B5", "title": "Mean Mr. Mustard"},
+      {"position": "B6", "title": "Polythene Pam"},
+      {"position": "B7", "title": "She Came In Through the Bathroom Window"},
+      {"position": "B8", "title": "Golden Slumbers"},
+      {"position": "B9", "title": "Carry That Weight"},
+      {"position": "B10", "title": "The End"},
+      {"position": "B11", "title": "Her Majesty"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "34.00", "status": "in_stock"},
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "34.00", "status": "reserved", "reserved_by": "beat.digger@example.com"}
+    ]
+  },
+  {
+    "artist": "Fleetwood Mac",
+    "title": "Rumours",
+    "label": "Warner Bros.",
+    "catalog_number": "BSK 3010",
+    "release_year": 1977,
+    "original_year": 1977,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["soft rock", "pop rock"],
+    "description": "Breakup songs written by a band breaking up, polished into perfect pop-rock. 'Dreams', 'Go Your Own Way' and 'The Chain' on one side of history.",
+    "tracklist": [
+      {"position": "A1", "title": "Second Hand News"},
+      {"position": "A2", "title": "Dreams"},
+      {"position": "A3", "title": "Never Going Back Again"},
+      {"position": "A4", "title": "Don't Stop"},
+      {"position": "A5", "title": "Go Your Own Way"},
+      {"position": "A6", "title": "Songbird"},
+      {"position": "B1", "title": "The Chain"},
+      {"position": "B2", "title": "You Make Loving Fun"},
+      {"position": "B3", "title": "I Don't Want to Know"},
+      {"position": "B4", "title": "Oh Daddy"},
+      {"position": "B5", "title": "Gold Dust Woman"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "30.00", "status": "in_stock"},
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "20.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Fleetwood Mac",
+    "title": "Fleetwood Mac",
+    "label": "Reprise",
+    "catalog_number": "MS 2225",
+    "release_year": 1975,
+    "original_year": 1975,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["soft rock"],
+    "description": "The first album with Buckingham and Nicks, where the classic line-up's magic begins. 'Rhiannon' and 'Landslide' live here.",
+    "tracklist": [
+      {"position": "A1", "title": "Monday Morning"},
+      {"position": "A2", "title": "Warm Ways"},
+      {"position": "A3", "title": "Blue Letter"},
+      {"position": "A4", "title": "Rhiannon"},
+      {"position": "A5", "title": "Over My Head"},
+      {"position": "A6", "title": "Crystal"},
+      {"position": "B1", "title": "Say You Love Me"},
+      {"position": "B2", "title": "Landslide"},
+      {"position": "B3", "title": "World Turning"},
+      {"position": "B4", "title": "Sugar Daddy"},
+      {"position": "B5", "title": "I'm So Afraid"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "25.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Fleetwood Mac",
+    "title": "Tusk",
+    "label": "Warner Bros.",
+    "catalog_number": null,
+    "release_year": 1979,
+    "original_year": 1979,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["soft rock", "art rock"],
+    "description": "The strange, sprawling follow-up to Rumours: Buckingham's lo-fi experiments next to Nicks and McVie's gems. A double album that rewards patience.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "28.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Pink Floyd",
+    "title": "The Dark Side of the Moon",
+    "label": "Harvest",
+    "catalog_number": "SHVL 804",
+    "release_year": 1973,
+    "original_year": 1973,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["prog rock", "psychedelic rock"],
+    "description": "Time, money, madness and a heartbeat holding it all together. The ultimate headphone album, here as a UK original with posters.",
+    "tracklist": [
+      {"position": "A1", "title": "Speak to Me"},
+      {"position": "A2", "title": "Breathe"},
+      {"position": "A3", "title": "On the Run"},
+      {"position": "A4", "title": "Time"},
+      {"position": "A5", "title": "The Great Gig in the Sky"},
+      {"position": "B1", "title": "Money"},
+      {"position": "B2", "title": "Us and Them"},
+      {"position": "B3", "title": "Any Colour You Like"},
+      {"position": "B4", "title": "Brain Damage"},
+      {"position": "B5", "title": "Eclipse"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "120.00", "status": "in_stock", "notes": "Both posters and stickers included."}
+    ]
+  },
+  {
+    "artist": "Pink Floyd",
+    "title": "The Dark Side of the Moon",
+    "label": "Pink Floyd Records",
+    "catalog_number": null,
+    "release_year": 2016,
+    "original_year": 1973,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["prog rock", "psychedelic rock"],
+    "description": "The remastered 180-gram reissue: dead-quiet vinyl and the full gatefold art. The easy way to hear why this record never left the charts.",
+    "tracklist": [
+      {"position": "A1", "title": "Speak to Me"},
+      {"position": "A2", "title": "Breathe"},
+      {"position": "A3", "title": "On the Run"},
+      {"position": "A4", "title": "Time"},
+      {"position": "A5", "title": "The Great Gig in the Sky"},
+      {"position": "B1", "title": "Money"},
+      {"position": "B2", "title": "Us and Them"},
+      {"position": "B3", "title": "Any Colour You Like"},
+      {"position": "B4", "title": "Brain Damage"},
+      {"position": "B5", "title": "Eclipse"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "35.00", "status": "in_stock"},
+      {"media_condition": "M", "sleeve_condition": "M", "price": "38.00", "status": "in_stock", "notes": "Sealed."}
+    ]
+  },
+  {
+    "artist": "Led Zeppelin",
+    "title": "Led Zeppelin IV",
+    "label": "Atlantic",
+    "catalog_number": "SD 7208",
+    "release_year": 1971,
+    "original_year": 1971,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["hard rock", "folk rock"],
+    "description": "Riffs, mandolins and mythology: 'Black Dog', 'Stairway to Heaven' and John Bonham's colossal drums on 'When the Levee Breaks'.",
+    "tracklist": [
+      {"position": "A1", "title": "Black Dog"},
+      {"position": "A2", "title": "Rock and Roll"},
+      {"position": "A3", "title": "The Battle of Evermore"},
+      {"position": "A4", "title": "Stairway to Heaven"},
+      {"position": "B1", "title": "Misty Mountain Hop"},
+      {"position": "B2", "title": "Four Sticks"},
+      {"position": "B3", "title": "Going to California"},
+      {"position": "B4", "title": "When the Levee Breaks"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "45.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Queen",
+    "title": "A Night at the Opera",
+    "label": "EMI",
+    "catalog_number": "EMTC 103",
+    "release_year": 1975,
+    "original_year": 1975,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["hard rock", "art rock"],
+    "description": "Queen's grand, theatrical masterpiece, from music-hall whimsy to the operatic 'Bohemian Rhapsody'. Gatefold UK original.",
+    "tracklist": [
+      {"position": "A1", "title": "Death on Two Legs (Dedicated to...)"},
+      {"position": "A2", "title": "Lazing on a Sunday Afternoon"},
+      {"position": "A3", "title": "I'm in Love with My Car"},
+      {"position": "A4", "title": "You're My Best Friend"},
+      {"position": "A5", "title": "'39"},
+      {"position": "A6", "title": "Sweet Lady"},
+      {"position": "A7", "title": "Seaside Rendezvous"},
+      {"position": "B1", "title": "The Prophet's Song"},
+      {"position": "B2", "title": "Love of My Life"},
+      {"position": "B3", "title": "Good Company"},
+      {"position": "B4", "title": "Bohemian Rhapsody"},
+      {"position": "B5", "title": "God Save the Queen"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "55.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Nirvana",
+    "title": "Nevermind",
+    "label": "DGC",
+    "catalog_number": "DGC-24425",
+    "release_year": 1991,
+    "original_year": 1991,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["grunge", "alternative rock"],
+    "description": "The album that dragged underground rock into the mainstream. Original 1991 vinyl is scarce because most copies sold on CD and cassette.",
+    "tracklist": [
+      {"position": "A1", "title": "Smells Like Teen Spirit"},
+      {"position": "A2", "title": "In Bloom"},
+      {"position": "A3", "title": "Come as You Are"},
+      {"position": "A4", "title": "Breed"},
+      {"position": "A5", "title": "Lithium"},
+      {"position": "A6", "title": "Polly"},
+      {"position": "B1", "title": "Territorial Pissings"},
+      {"position": "B2", "title": "Drain You"},
+      {"position": "B3", "title": "Lounge Act"},
+      {"position": "B4", "title": "Stay Away"},
+      {"position": "B5", "title": "On a Plain"},
+      {"position": "B6", "title": "Something in the Way"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "VG+", "price": "280.00", "status": "sold"}
+    ]
+  },
+  {
+    "artist": "Radiohead",
+    "title": "The Bends",
+    "label": "Parlophone",
+    "catalog_number": "PCS 7372",
+    "release_year": 1995,
+    "original_year": 1995,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["alternative rock"],
+    "description": "Big guitars and bigger feelings: the bridge between Radiohead's early rock and everything strange that followed. 'Fake Plastic Trees' still floors people.",
+    "tracklist": [
+      {"position": "A1", "title": "Planet Telex"},
+      {"position": "A2", "title": "The Bends"},
+      {"position": "A3", "title": "High and Dry"},
+      {"position": "A4", "title": "Fake Plastic Trees"},
+      {"position": "A5", "title": "Bones"},
+      {"position": "A6", "title": "(Nice Dream)"},
+      {"position": "B1", "title": "Just"},
+      {"position": "B2", "title": "My Iron Lung"},
+      {"position": "B3", "title": "Bullet Proof..I Wish I Was"},
+      {"position": "B4", "title": "Black Star"},
+      {"position": "B5", "title": "Sulk"},
+      {"position": "B6", "title": "Street Spirit (Fade Out)"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "60.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Radiohead",
+    "title": "OK Computer",
+    "label": "Parlophone",
+    "catalog_number": "NODATA 02",
+    "release_year": 1997,
+    "original_year": 1997,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["alternative rock", "art rock"],
+    "description": "Anxious, beautiful and eerily prophetic about life with technology. The original double LP is one of the most sought-after records of the 90s.",
+    "tracklist": [
+      {"position": "A1", "title": "Airbag"},
+      {"position": "A2", "title": "Paranoid Android"},
+      {"position": "A3", "title": "Subterranean Homesick Alien"},
+      {"position": "B1", "title": "Exit Music (For a Film)"},
+      {"position": "B2", "title": "Let Down"},
+      {"position": "B3", "title": "Karma Police"},
+      {"position": "C1", "title": "Fitter Happier"},
+      {"position": "C2", "title": "Electioneering"},
+      {"position": "C3", "title": "Climbing Up the Walls"},
+      {"position": "D1", "title": "No Surprises"},
+      {"position": "D2", "title": "Lucky"},
+      {"position": "D3", "title": "The Tourist"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "VG+", "price": "140.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Radiohead",
+    "title": "Kid A",
+    "label": "Parlophone",
+    "catalog_number": null,
+    "release_year": 2000,
+    "original_year": 2000,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock", "electronic"],
+    "styles": ["art rock", "idm"],
+    "description": "Radiohead swap guitars for glitchy electronics and buried vocals. Cold on first listen, then impossible to stop playing.",
+    "tracklist": [
+      {"position": "1", "title": "Everything in Its Right Place"},
+      {"position": "2", "title": "Kid A"},
+      {"position": "3", "title": "The National Anthem"},
+      {"position": "4", "title": "How to Disappear Completely"},
+      {"position": "5", "title": "Treefingers"},
+      {"position": "6", "title": "Optimistic"},
+      {"position": "7", "title": "In Limbo"},
+      {"position": "8", "title": "Idioteque"},
+      {"position": "9", "title": "Morning Bell"},
+      {"position": "10", "title": "Motion Picture Soundtrack"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "75.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Radiohead",
+    "title": "In Rainbows",
+    "label": "XL Recordings",
+    "catalog_number": "XLLP324",
+    "release_year": 2007,
+    "original_year": 2007,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["alternative rock", "art rock"],
+    "description": "Radiohead at their warmest: intricate rhythms, gentle melodies and 'Weird Fishes/Arpeggi'. The pay-what-you-want album that is worth owning on wax.",
+    "tracklist": [
+      {"position": "A1", "title": "15 Step"},
+      {"position": "A2", "title": "Bodysnatchers"},
+      {"position": "A3", "title": "Nude"},
+      {"position": "A4", "title": "Weird Fishes/Arpeggi"},
+      {"position": "A5", "title": "All I Need"},
+      {"position": "B1", "title": "Faust Arp"},
+      {"position": "B2", "title": "Reckoner"},
+      {"position": "B3", "title": "House of Cards"},
+      {"position": "B4", "title": "Jigsaw Falling into Place"},
+      {"position": "B5", "title": "Videotape"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "32.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Joy Division",
+    "title": "Unknown Pleasures",
+    "label": "Factory",
+    "catalog_number": "FACT 10",
+    "release_year": 1979,
+    "original_year": 1979,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["post-punk"],
+    "description": "Bleak, spacious and electrifying: Martin Hannett's production turned a Manchester punk band into something ghostly. Iconic pulsar cover.",
+    "tracklist": [
+      {"position": "A1", "title": "Disorder"},
+      {"position": "A2", "title": "Day of the Lords"},
+      {"position": "A3", "title": "Candidate"},
+      {"position": "A4", "title": "Insight"},
+      {"position": "A5", "title": "New Dawn Fades"},
+      {"position": "B1", "title": "She's Lost Control"},
+      {"position": "B2", "title": "Shadowplay"},
+      {"position": "B3", "title": "Wilderness"},
+      {"position": "B4", "title": "Interzone"},
+      {"position": "B5", "title": "I Remember Nothing"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "95.00", "status": "in_stock", "notes": "Textured sleeve, original inner."}
+    ]
+  },
+  {
+    "artist": "Joy Division",
+    "title": "Unknown Pleasures",
+    "label": "Factory",
+    "catalog_number": null,
+    "release_year": 2015,
+    "original_year": 1979,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["post-punk"],
+    "description": "A remastered 180-gram reissue that keeps the textured sleeve. The original's dark atmosphere without the original's price tag.",
+    "tracklist": [
+      {"position": "A1", "title": "Disorder"},
+      {"position": "A2", "title": "Day of the Lords"},
+      {"position": "A3", "title": "Candidate"},
+      {"position": "A4", "title": "Insight"},
+      {"position": "A5", "title": "New Dawn Fades"},
+      {"position": "B1", "title": "She's Lost Control"},
+      {"position": "B2", "title": "Shadowplay"},
+      {"position": "B3", "title": "Wilderness"},
+      {"position": "B4", "title": "Interzone"},
+      {"position": "B5", "title": "I Remember Nothing"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "27.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Joy Division",
+    "title": "Love Will Tear Us Apart",
+    "label": "Factory",
+    "catalog_number": "FAC 23",
+    "release_year": 1980,
+    "original_year": 1980,
+    "country": "UK",
+    "format": "7\"",
+    "genres": ["rock"],
+    "styles": ["post-punk", "new wave"],
+    "description": "The single that outlived the band: a danceable song about heartbreak, released weeks after Ian Curtis's death. Original 7-inch.",
+    "tracklist": [
+      {"position": "A", "title": "Love Will Tear Us Apart"},
+      {"position": "B", "title": "These Days"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "35.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Joy Division",
+    "title": "An Ideal for Living",
+    "label": "Enigma",
+    "catalog_number": null,
+    "release_year": 1978,
+    "original_year": 1978,
+    "country": "UK",
+    "format": "EP",
+    "genres": ["rock"],
+    "styles": ["punk", "post-punk"],
+    "description": "The band's raw, self-released debut EP, still closer to punk than to the sound that made them famous. A genuine collector's rarity.",
+    "tracklist": [
+      {"position": "A1", "title": "Warsaw"},
+      {"position": "A2", "title": "No Love Lost"},
+      {"position": "B1", "title": "Leaders of Men"},
+      {"position": "B2", "title": "Failures"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "400.00", "status": "in_stock", "notes": "Fold-out sleeve complete."}
+    ]
+  },
+  {
+    "artist": "Talking Heads",
+    "title": "Remain in Light",
+    "label": "Sire",
+    "catalog_number": "SRK 6095",
+    "release_year": 1980,
+    "original_year": 1980,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock", "funk"],
+    "styles": ["new wave", "post-punk", "afrobeat"],
+    "description": "New wave meets Fela Kuti: interlocking polyrhythms, Brian Eno's production and 'Once in a Lifetime'. Nervous, joyful and endlessly danceable.",
+    "tracklist": [
+      {"position": "A1", "title": "Born Under Punches (The Heat Goes On)"},
+      {"position": "A2", "title": "Crosseyed and Painless"},
+      {"position": "A3", "title": "The Great Curve"},
+      {"position": "B1", "title": "Once in a Lifetime"},
+      {"position": "B2", "title": "Houses in Motion"},
+      {"position": "B3", "title": "Seen and Not Seen"},
+      {"position": "B4", "title": "Listening Wind"},
+      {"position": "B5", "title": "The Overload"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "40.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Television",
+    "title": "Marquee Moon",
+    "label": "Elektra",
+    "catalog_number": "7E-1098",
+    "release_year": 1977,
+    "original_year": 1977,
+    "country": "US",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["post-punk", "art rock"],
+    "description": "Two guitars weaving crystalline lines around each other. Born in the CBGB punk scene, but closer to jazz in spirit; the title track is ten minutes of bliss.",
+    "tracklist": [
+      {"position": "A1", "title": "See No Evil"},
+      {"position": "A2", "title": "Venus"},
+      {"position": "A3", "title": "Friction"},
+      {"position": "A4", "title": "Marquee Moon"},
+      {"position": "B1", "title": "Elevation"},
+      {"position": "B2", "title": "Guiding Light"},
+      {"position": "B3", "title": "Prove It"},
+      {"position": "B4", "title": "Torn Curtain"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "55.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "My Bloody Valentine",
+    "title": "Loveless",
+    "label": "Creation",
+    "catalog_number": "CRELP 060",
+    "release_year": 1991,
+    "original_year": 1991,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["rock"],
+    "styles": ["shoegaze", "dream pop"],
+    "description": "Walls of bent, blurred guitar and whispered melodies. The defining shoegaze record, best played loud.",
+    "tracklist": [
+      {"position": "A1", "title": "Only Shallow"},
+      {"position": "A2", "title": "Loomer"},
+      {"position": "A3", "title": "Touched"},
+      {"position": "A4", "title": "To Here Knows When"},
+      {"position": "A5", "title": "When You Sleep"},
+      {"position": "B1", "title": "I Only Said"},
+      {"position": "B2", "title": "Come in Alone"},
+      {"position": "B3", "title": "Sometimes"},
+      {"position": "B4", "title": "Blown a Wish"},
+      {"position": "B5", "title": "What You Want"},
+      {"position": "B6", "title": "Soon"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "110.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Kraftwerk",
+    "title": "Autobahn",
+    "label": "Philips",
+    "catalog_number": "6305 231",
+    "release_year": 1974,
+    "original_year": 1974,
+    "country": "Germany",
+    "format": "LP",
+    "genres": ["electronic"],
+    "styles": ["krautrock", "synth-pop"],
+    "description": "A 22-minute synthesizer drive down the motorway that pointed the way to synth-pop and techno. German original pressing.",
+    "tracklist": [
+      {"position": "A1", "title": "Autobahn"},
+      {"position": "B1", "title": "Kometenmelodie 1"},
+      {"position": "B2", "title": "Kometenmelodie 2"},
+      {"position": "B3", "title": "Mitternacht"},
+      {"position": "B4", "title": "Morgenspaziergang"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "70.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Kraftwerk",
+    "title": "Trans-Europe Express",
+    "label": "Kling Klang",
+    "catalog_number": null,
+    "release_year": 1977,
+    "original_year": 1977,
+    "country": "Germany",
+    "format": "LP",
+    "genres": ["electronic"],
+    "styles": ["synth-pop", "krautrock"],
+    "description": "Mechanical rhythms, melancholy melodies and a train journey across a continent. Its title track became the backbone of early hip-hop and electro.",
+    "tracklist": [
+      {"position": "A1", "title": "Europe Endless"},
+      {"position": "A2", "title": "The Hall of Mirrors"},
+      {"position": "A3", "title": "Showroom Dummies"},
+      {"position": "B1", "title": "Trans-Europe Express"},
+      {"position": "B2", "title": "Metal on Metal"},
+      {"position": "B3", "title": "Franz Schubert"},
+      {"position": "B4", "title": "Endless Endless"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "45.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "New Order",
+    "title": "Blue Monday",
+    "label": "Factory",
+    "catalog_number": "FAC 73",
+    "release_year": 1983,
+    "original_year": 1983,
+    "country": "UK",
+    "format": "12\"",
+    "genres": ["electronic"],
+    "styles": ["synth-pop", "new wave"],
+    "description": "The best-selling 12-inch single of its era, in the famous die-cut floppy-disk sleeve. Drum machine, bass hook, pure dancefloor.",
+    "tracklist": [
+      {"position": "A", "title": "Blue Monday"},
+      {"position": "B", "title": "The Beach"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "25.00", "status": "in_stock"},
+      {"media_condition": "VG", "sleeve_condition": "G+", "price": "15.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Aphex Twin",
+    "title": "Selected Ambient Works 85-92",
+    "label": "Apollo",
+    "catalog_number": null,
+    "release_year": 1992,
+    "original_year": 1992,
+    "country": "Belgium",
+    "format": "LP",
+    "genres": ["electronic"],
+    "styles": ["ambient techno", "idm"],
+    "description": "Bedroom-made techno that floats as much as it pulses. Hazy, melodic and strangely emotional; a cornerstone of ambient electronic music.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "85.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Boards of Canada",
+    "title": "Music Has the Right to Children",
+    "label": "Warp",
+    "catalog_number": null,
+    "release_year": 1998,
+    "original_year": 1998,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["electronic"],
+    "styles": ["idm", "downtempo"],
+    "description": "Wobbly analog synths and hip-hop beats that sound like half-remembered childhood films. Nostalgic and a little unsettling.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "42.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Daft Punk",
+    "title": "Discovery",
+    "label": "Virgin",
+    "catalog_number": null,
+    "release_year": 2001,
+    "original_year": 2001,
+    "country": "France",
+    "format": "LP",
+    "genres": ["electronic"],
+    "styles": ["french house", "disco"],
+    "description": "Filtered disco, vocoder pop and pure joy: 'One More Time', 'Digital Love' and 'Harder, Better, Faster, Stronger'.",
+    "tracklist": [
+      {"position": "1", "title": "One More Time"},
+      {"position": "2", "title": "Aerodynamic"},
+      {"position": "3", "title": "Digital Love"},
+      {"position": "4", "title": "Harder, Better, Faster, Stronger"},
+      {"position": "5", "title": "Crescendolls"},
+      {"position": "6", "title": "Nightvision"},
+      {"position": "7", "title": "Superheroes"},
+      {"position": "8", "title": "High Life"},
+      {"position": "9", "title": "Something About Us"},
+      {"position": "10", "title": "Voyager"},
+      {"position": "11", "title": "Veridis Quo"},
+      {"position": "12", "title": "Short Circuit"},
+      {"position": "13", "title": "Face to Face"},
+      {"position": "14", "title": "Too Long"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "55.00", "status": "in_stock"},
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "70.00", "status": "sold"}
+    ]
+  },
+  {
+    "artist": "Nas",
+    "title": "Illmatic",
+    "label": "Columbia",
+    "catalog_number": null,
+    "release_year": 1994,
+    "original_year": 1994,
+    "country": "US",
+    "format": "LP",
+    "genres": ["hip-hop"],
+    "styles": ["boom bap", "east coast"],
+    "description": "Ten tracks, no filler: a young Queensbridge poet over beats by Premier, Pete Rock and Q-Tip. The benchmark for lyrical hip-hop.",
+    "tracklist": [
+      {"position": "1", "title": "The Genesis"},
+      {"position": "2", "title": "N.Y. State of Mind"},
+      {"position": "3", "title": "Life's a Bitch"},
+      {"position": "4", "title": "The World Is Yours"},
+      {"position": "5", "title": "Halftime"},
+      {"position": "6", "title": "Memory Lane (Sittin' in da Park)"},
+      {"position": "7", "title": "One Love"},
+      {"position": "8", "title": "One Time 4 Your Mind"},
+      {"position": "9", "title": "Represent"},
+      {"position": "10", "title": "It Ain't Hard to Tell"}
+    ],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "80.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "A Tribe Called Quest",
+    "title": "The Low End Theory",
+    "label": "Jive",
+    "catalog_number": null,
+    "release_year": 1991,
+    "original_year": 1991,
+    "country": "US",
+    "format": "LP",
+    "genres": ["hip-hop", "jazz"],
+    "styles": ["jazz rap", "boom bap"],
+    "description": "Upright bass, jazz samples and effortless back-and-forth between Q-Tip and Phife. Where hip-hop and jazz shook hands.",
+    "tracklist": [
+      {"position": "1", "title": "Excursions"},
+      {"position": "2", "title": "Buggin' Out"},
+      {"position": "3", "title": "Rap Promoter"},
+      {"position": "4", "title": "Butter"},
+      {"position": "5", "title": "Verses from the Abstract"},
+      {"position": "6", "title": "Show Business"},
+      {"position": "7", "title": "Vibes and Stuff"},
+      {"position": "8", "title": "The Infamous Date Rape"},
+      {"position": "9", "title": "Check the Rhime"},
+      {"position": "10", "title": "Everything Is Fair"},
+      {"position": "11", "title": "Jazz (We've Got)"},
+      {"position": "12", "title": "Skypager"},
+      {"position": "13", "title": "What?"},
+      {"position": "14", "title": "Scenario"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "50.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "De La Soul",
+    "title": "3 Feet High and Rising",
+    "label": "Tommy Boy",
+    "catalog_number": null,
+    "release_year": 1989,
+    "original_year": 1989,
+    "country": "US",
+    "format": "LP",
+    "genres": ["hip-hop"],
+    "styles": ["jazz rap", "golden age"],
+    "description": "Playful, colourful and packed with samples, from Steely Dan to Hall & Oates. A daisy-age antidote to tough-guy rap.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "45.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Wu-Tang Clan",
+    "title": "Enter the Wu-Tang (36 Chambers)",
+    "label": "Loud",
+    "catalog_number": null,
+    "release_year": 1993,
+    "original_year": 1993,
+    "country": "US",
+    "format": "LP",
+    "genres": ["hip-hop"],
+    "styles": ["boom bap", "east coast"],
+    "description": "Gritty, kung-fu-film-sampling beats from RZA and nine wildly different MCs. Raw, murky and hugely influential.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "65.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "J Dilla",
+    "title": "Donuts",
+    "label": "Stones Throw",
+    "catalog_number": null,
+    "release_year": 2006,
+    "original_year": 2006,
+    "country": "US",
+    "format": "LP",
+    "genres": ["hip-hop"],
+    "styles": ["instrumental hip-hop"],
+    "description": "Thirty-one short, looping soul-sample sketches finished by a producer near the end of his life. Warm, wonky and deeply moving.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "35.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Kendrick Lamar",
+    "title": "To Pimp a Butterfly",
+    "label": "Top Dawg Entertainment",
+    "catalog_number": null,
+    "release_year": 2015,
+    "original_year": 2015,
+    "country": "US",
+    "format": "LP",
+    "genres": ["hip-hop", "jazz", "funk"],
+    "styles": ["jazz rap", "conscious"],
+    "description": "Hip-hop steeped in jazz, funk and spoken word, with Thundercat and Kamasi Washington in the band. Dense, political and musical.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "38.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Glenn Gould",
+    "title": "Bach: The Goldberg Variations",
+    "label": "Columbia Masterworks",
+    "catalog_number": "ML 5060",
+    "release_year": 1956,
+    "original_year": 1956,
+    "country": "US",
+    "format": "LP",
+    "genres": ["classical"],
+    "styles": ["baroque"],
+    "description": "The debut that made a young Canadian pianist famous overnight: fast, crisp and full of energy. Original mono pressing.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "G+", "price": "150.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Glenn Gould",
+    "title": "Bach: The Goldberg Variations (1981 Recording)",
+    "label": "CBS Masterworks",
+    "catalog_number": null,
+    "release_year": 1982,
+    "original_year": 1982,
+    "country": "US",
+    "format": "LP",
+    "genres": ["classical"],
+    "styles": ["baroque"],
+    "description": "Gould returns to the Goldbergs a lifetime later: slower, deeper and reflective. Fascinating side by side with his 1956 debut.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "VG+", "price": "40.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Jacqueline du Pré",
+    "title": "Elgar: Cello Concerto",
+    "label": "HMV",
+    "catalog_number": "ASD 655",
+    "release_year": 1965,
+    "original_year": 1965,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["classical"],
+    "styles": ["romantic"],
+    "description": "A twenty-year-old du Pré with Barbirolli and the LSO, in the performance that still defines this concerto. Paired with Janet Baker's Sea Pictures.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG", "price": "60.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Arvo Pärt",
+    "title": "Tabula Rasa",
+    "label": "ECM New Series",
+    "catalog_number": null,
+    "release_year": 1984,
+    "original_year": 1984,
+    "country": "Germany",
+    "format": "LP",
+    "genres": ["classical"],
+    "styles": ["minimalism", "contemporary"],
+    "description": "Bell-like, slowly unfolding music of great stillness. The record that introduced Pärt's 'tintinnabuli' style to the world.",
+    "tracklist": [
+      {"position": "A1", "title": "Fratres (for violin and piano)"},
+      {"position": "A2", "title": "Cantus in Memory of Benjamin Britten"},
+      {"position": "A3", "title": "Fratres (for 12 cellos)"},
+      {"position": "B1", "title": "Tabula Rasa"}
+    ],
+    "copies": [
+      {"media_condition": "NM", "sleeve_condition": "NM", "price": "45.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Bob Marley & The Wailers",
+    "title": "Catch a Fire",
+    "label": "Island",
+    "catalog_number": "ILPS 9241",
+    "release_year": 1973,
+    "original_year": 1973,
+    "country": "UK",
+    "format": "LP",
+    "genres": ["reggae"],
+    "styles": ["roots reggae"],
+    "description": "The album that carried roots reggae to the world: militant lyrics, deep grooves and 'Stir It Up'.",
+    "tracklist": [
+      {"position": "A1", "title": "Concrete Jungle"},
+      {"position": "A2", "title": "Slave Driver"},
+      {"position": "A3", "title": "400 Years"},
+      {"position": "A4", "title": "Stop That Train"},
+      {"position": "A5", "title": "Baby We've Got a Date (Rock It Baby)"},
+      {"position": "B1", "title": "Stir It Up"},
+      {"position": "B2", "title": "Kinky Reggae"},
+      {"position": "B3", "title": "No More Trouble"},
+      {"position": "B4", "title": "Midnight Ravers"}
+    ],
+    "copies": [
+      {"media_condition": "VG", "sleeve_condition": "VG", "price": "55.00", "status": "in_stock"}
+    ]
+  },
+  {
+    "artist": "Rustavi Choir",
+    "title": "Georgian Voices",
+    "label": "Nonesuch",
+    "catalog_number": null,
+    "release_year": 1989,
+    "original_year": 1989,
+    "country": "US",
+    "format": "LP",
+    "genres": ["georgian", "folk", "world"],
+    "styles": ["georgian polyphony"],
+    "description": "Georgian polyphonic singing at its most powerful: three-part harmonies, dissonant chords and ancient table songs. Nothing else sounds like it.",
+    "tracklist": [],
+    "copies": [
+      {"media_condition": "VG+", "sleeve_condition": "VG+", "price": "30.00", "status": "in_stock"}
+    ]
+  }
+]

@@ -6,6 +6,7 @@ from app.auth.deps import DbSession, require_staff
 from app.models import InventoryItem, Record
 from app.repositories.inventory import has_active_reservation
 from app.schemas.catalog import InventoryCreate, InventoryIn, InventoryOut, StatusUpdate
+from app.repositories.wantlist import match_new_copy
 
 # `dependencies=` on the router applies require_staff to EVERY endpoint below,
 # so a new endpoint can't accidentally be left open.
@@ -26,7 +27,7 @@ async def create_item(data: InventoryCreate, db: DbSession) -> InventoryItem:
     item = InventoryItem(**data.model_dump(), status='in_stock')
     db.add(item)
     await db.commit()
-    # TODO Phase 6.4: wantlist matching (set matched_item_id on matching wantlist entries).
+    await match_new_copy(db, item.id)  # wantlists waiting for this record get their match
     return item
 
 
@@ -37,6 +38,7 @@ async def update_item(item_id: int, data: InventoryIn, db: DbSession) -> Invento
     for field, value in data.model_dump().items():
         setattr(item, field, value)
     await db.commit()
+    await match_new_copy(db, item.id)  # a price cut or regrade can create (or break) a match
     return item
 
 
@@ -54,6 +56,8 @@ async def change_status(item_id: int, data: StatusUpdate, db: DbSession) -> Inve
         )
     item.status = data.status
     await db.commit()
+    if item.status == 'in_stock':
+        await match_new_copy(db, item.id)  # back on the shelf → may fulfil a wantlist
     return item
 
 
