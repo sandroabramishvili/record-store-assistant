@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.db import engine
-from app.routers import auth, profile
+from app.routers import auth, collection, inventory, profile, records, wantlist
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
 
@@ -27,6 +27,10 @@ app = FastAPI(title='Record Store Assistant', version='0.1.0', lifespan=lifespan
 
 app.include_router(auth.router)
 app.include_router(profile.router)
+app.include_router(records.router)
+app.include_router(inventory.router)
+app.include_router(collection.router)
+app.include_router(wantlist.router)
 
 
 @app.get('/health', tags=['meta'])
