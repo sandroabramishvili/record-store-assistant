@@ -39,13 +39,15 @@ async def top_values(db: AsyncSession, key: str, since: ColumnElement, limit: in
                      *, zero_results: bool = False) -> list[dict]:
     """Most asked-for values of one list field of the constraints (genres / artists / titles).
 
-    One search for ["jazz", "funk"] counts once for each. Grouped case-insensitively
-    ("Radiohead" = "radiohead "); shown as first written (deterministic, unlike mode()/min(),
-    whose ties and case order depend on the database's collation).
+    One search for ["jazz", "funk"] counts once for each. Grouped ignoring case, spaces and
+    punctuation ("Radiohead" = "radiohead ", "hip hop" = "hip-hop"); shown as first written
+    (deterministic, unlike mode()/min(), whose ties and case order depend on the collation).
     """
     field = SearchLog.constraints[key]
     value = func.jsonb_array_elements_text(field).table_valued('value').lateral(f'{key}_value')
-    name = func.lower(func.trim(value.c.value))
+    # Same key as services.normalize.normalize_tag, in SQL: case, spaces and punctuation don't
+    # count, so "hip hop" and "hip-hop" are one row (they were two in a screenshot).
+    name = func.regexp_replace(func.lower(value.c.value), r'[[:space:][:punct:]]+', '', 'g')
     where = _is_search(since) + [func.jsonb_typeof(field) == 'array']   # skip missing / null lists
     if zero_results:
         where.append(SearchLog.results_count == 0)

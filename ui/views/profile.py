@@ -8,7 +8,7 @@ from components import CONDITION_HELP, CONDITIONS, call
 GENRES = ['jazz', 'hard bop', 'jazz-funk', 'soul', 'funk', 'rock', 'pop rock', 'punk', 'post-punk', 'electronic',
           'hip-hop', 'classical', 'blues', 'reggae', 'folk', 'grunge', 'georgian']
 
-st.title('👤 Profile')
+st.title('Profile')
 me = st.session_state['me']
 st.caption(f'{me["full_name"]} · {me["email"]}')
 

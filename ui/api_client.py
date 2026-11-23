@@ -16,10 +16,21 @@ from typing import Any
 import httpx
 import streamlit as st
 
-API_URL = os.getenv('API_URL', 'http://localhost:8000').rstrip('/')
+def _api_url() -> str:
+    """API_URL, with "localhost" pinned to IPv4. On Windows "localhost" resolves to ::1 first;
+    uvicorn listens on 127.0.0.1 only, so EVERY request waited ~2 s for the IPv6 attempt to
+    fail (measured: 2.27 s vs 0.02 s per call, i.e. 10-14 s per page)."""
+    url = os.getenv('API_URL', 'http://127.0.0.1:8000').rstrip('/')
+    return url.replace('://localhost:', '://127.0.0.1:').replace('://localhost/', '://127.0.0.1/')
+
+
+API_URL = _api_url()
 TIMEOUT = httpx.Timeout(15.0, connect=5.0)
 # A chat turn may take up to the API's turn deadline (90 s) between the first and last event.
 STREAM_TIMEOUT = httpx.Timeout(connect=5.0, read=120.0, write=15.0, pool=5.0)
+# One shared client: connections are reused (keep-alive) instead of a new client, TCP
+# connection and setup per call (~0.25 s each). Safe to share between Streamlit sessions.
+_http = httpx.Client(base_url=API_URL, timeout=TIMEOUT)
 
 
 class ApiError(Exception):
@@ -61,7 +72,7 @@ def _forget_expired_login(error: ApiError) -> None:
 
 def request(method: str, path: str, **kwargs) -> Any:
     try:
-        response = httpx.request(method, f'{API_URL}{path}', headers=_headers(), timeout=TIMEOUT, **kwargs)
+        response = _http.request(method, path, headers=_headers(), **kwargs)
     except httpx.TimeoutException as e:
         raise ApiError(0, 'The store server took too long to respond.') from e
     except httpx.HTTPError as e:
@@ -76,7 +87,7 @@ def request(method: str, path: str, **kwargs) -> Any:
 def _stream(path: str, body: dict) -> Iterator[dict]:
     """POST that answers with Server-Sent Events: yields each `data: {...}` event as a dict."""
     try:
-        with httpx.stream('POST', f'{API_URL}{path}', json=body, headers=_headers(), timeout=STREAM_TIMEOUT) as r:
+        with _http.stream('POST', path, json=body, headers=_headers(), timeout=STREAM_TIMEOUT) as r:
             if r.status_code >= 400:
                 r.read()
                 error = _error_from(r)

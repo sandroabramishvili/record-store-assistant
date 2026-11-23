@@ -1,9 +1,11 @@
 import streamlit as st
 
 import api_client as api
+import style
 from api_client import ApiError
 
-st.title('💿 Record Store Assistant')
+style.hero()
+st.title('Step inside, the needle is down')
 
 if flash := st.session_state.pop('flash', None):
     st.warning(flash)

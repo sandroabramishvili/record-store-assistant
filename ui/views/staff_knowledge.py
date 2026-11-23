@@ -8,7 +8,7 @@ from components import call
 
 TOPICS = ['grading', 'pressings', 'care', 'equipment', 'genre']
 
-st.title('📖 Knowledge base')
+st.title('Knowledge base')
 articles_tab, search_tab = st.tabs(['Articles', 'Test a question'])
 
 with articles_tab:

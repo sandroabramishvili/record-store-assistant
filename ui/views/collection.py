@@ -6,7 +6,7 @@ import streamlit as st
 import api_client as api
 from components import call
 
-st.title('📚 My collection')
+st.title('My collection')
 st.caption("Records you already own. The assistant won't recommend these, and uses them to learn your taste.")
 
 data = call(api.get_collection)

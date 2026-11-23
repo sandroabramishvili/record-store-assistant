@@ -9,9 +9,9 @@ import streamlit as st
 import api_client as api
 from components import call, money
 
-SERIES = '#2a78d6'          # dataviz reference palette, categorical slot 1 (validated light + dark)
+SERIES = '#c4501b'          # retro burnt orange: passes the dataviz validator on the cream surface #f3e9d2
 
-st.title('📊 Analytics')
+st.title('Analytics')
 f1, f2 = st.columns([3, 1])
 days = f1.select_slider('Period', [7, 14, 30, 90, 180, 365], value=30, format_func=lambda d: f'last {d} days')
 limit = f2.number_input('Items per list', 3, 50, 10)
@@ -28,11 +28,13 @@ def ranked(rows: list[dict], what: str, key: str, *, share: bool = False) -> Non
         df['Share'] = df['share']
         tooltip.append(alt.Tooltip('Share:Q', format='.0%'))
     chart = (alt.Chart(df)
-             .mark_bar(color=SERIES, cornerRadiusEnd=4, size=14)
+             .mark_bar(color=SERIES, cornerRadiusEnd=4, size=16)
              .encode(x=alt.X('Count:Q', axis=alt.Axis(tickMinStep=1, grid=True, gridOpacity=0.25, title=None)),
-                     y=alt.Y(f'{what}:N', sort='-x', axis=alt.Axis(title=None, labelLimit=220)),
+                     y=alt.Y(f'{what}:N', sort='-x', axis=alt.Axis(title=None, labelLimit=220, labelFontSize=12)),
                      tooltip=tooltip)
-             .properties(height=max(60, 26 * len(df)))
+             # A fixed band PER BAR (not a total height): with a total height Vega-Lite took the
+             # axis out of it, bands got thinner than the bars and labels overlapped (screenshot).
+             .properties(height=alt.Step(28))
              .configure_view(stroke=None))
     st.altair_chart(chart, width='stretch')
     if st.toggle('Show as table', key=f'table-{key}'):

@@ -5,8 +5,9 @@ import streamlit as st
 
 import api_client as api
 from components import CONDITION_HELP, CONDITIONS, call, money, pressing
+from style import esc
 
-st.title('🔎 Browse catalog')
+st.title('Browse catalog')
 
 with st.form('filters'):
     c1, c2, c3 = st.columns(3)
@@ -43,10 +44,10 @@ def details(record_id: int) -> None:
     copies = [c for c in record['copies'] if c['status'] == 'in_stock']
     st.markdown(f'**Copies in stock: {len(copies)}**')
     for copy in copies:
-        left, mid, right = st.columns([3, 1, 1])
+        left, mid, right = st.columns([3, 1, 1], vertical_alignment='center')
         left.write(f'Media {copy["media_condition"]} · sleeve {copy["sleeve_condition"]}'
                    + (f' · {copy["notes"]}' if copy['notes'] else ''))
-        mid.write(f'**{money(copy["price"])}**')
+        mid.markdown(f'<span class="rs-price">{esc(money(copy["price"]))}</span>', unsafe_allow_html=True)
         if right.button('Reserve', key=f'reserve-{copy["id"]}', type='primary'):
             if call(api.reserve, copy['id']):
                 st.success('Reserved for 48 hours. See "My reservations".')
@@ -60,15 +61,18 @@ def details(record_id: int) -> None:
 if result:
     st.caption(f'{result["total"]} records')
     for record in result['items']:
-        with st.container(border=True):
-            left, mid, right = st.columns([4, 2, 1])
-            left.markdown(f'**{record["artist"]} — {record["title"]}**')
-            left.caption(f'{record["original_year"]} · {pressing(record)} · {record["label"]} · '
-                         f'{", ".join(record["genres"])}')
+        with st.container(key=f'card-r{record["id"]}'):
+            left, mid, right = st.columns([4, 2, 1], vertical_alignment='center')
+            left.markdown(f'<span class="rs-card-title">{esc(record["artist"])} — {esc(record["title"])}</span><br>'
+                          f'<span class="rs-card-meta">{record["original_year"]} · {esc(pressing(record))} · '
+                          f'{esc(record["label"])} · {esc(", ".join(record["genres"]))}</span>',
+                          unsafe_allow_html=True)
             if record['available_copies']:
-                mid.write(f'{record["available_copies"]} in stock, from **{money(record["lowest_price"])}**')
+                mid.markdown(f'{record["available_copies"]} in stock, from '
+                             f'<span class="rs-price">{esc(money(record["lowest_price"]))}</span>',
+                             unsafe_allow_html=True)
             else:
-                mid.caption('Not in stock')
+                mid.markdown('<span class="rs-stamp">sold out</span>', unsafe_allow_html=True)
             if right.button('Details', key=f'details-{record["id"]}'):
                 details(record['id'])
     pages = max(1, -(-result['total'] // result['size']))

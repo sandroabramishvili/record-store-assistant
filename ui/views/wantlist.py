@@ -5,7 +5,7 @@ import streamlit as st
 import api_client as api
 from components import CONDITION_HELP, CONDITIONS, call, money, record_card
 
-st.title('⭐ Wantlist')
+st.title('Wantlist')
 st.caption("Records you're looking for. When a matching copy comes in, it shows up here.")
 
 data = call(api.get_wantlist)
@@ -24,7 +24,7 @@ if data:
                     st.rerun()
             if match := entry.get('match'):
                 st.markdown('**In stock now:**')
-                record_card({**match, 'year': None, 'pressing': None, 'status': 'in_stock'})
+                record_card({**match, 'year': None, 'pressing': None, 'status': 'in_stock'}, key=f'w{entry["id"]}')
                 if st.button('Reserve this copy', key=f'reserve-{match["item_id"]}', type='primary'):
                     if call(api.reserve, match['item_id'], success='Reserved for 48 hours'):
                         st.rerun()

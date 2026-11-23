@@ -16,6 +16,8 @@ from components import call, record_card
 HINT = ('Tell us what you like and add a few records you own, '
         "so the assistant can recommend records you don't have yet.")
 
+AVATARS = {'user': ':material/headphones:', 'assistant': ':material/album:'}   # the listener and the record
+
 NODE_LABELS = {                                    # what each graph step means to a customer
     'understand_request': 'Reading your message',
     'load_context': 'Checking your profile and collection',
@@ -39,9 +41,9 @@ NODE_LABELS = {                                    # what each graph step means 
 def run_turn(events: Iterator[dict], user_text: str | None = None) -> None:
     """Show a turn while it streams; then reload the page from the server's history."""
     if user_text:
-        with st.chat_message('user'):
+        with st.chat_message('user', avatar=AVATARS['user']):
             st.markdown(user_text)
-    with st.chat_message('assistant'):
+    with st.chat_message('assistant', avatar=AVATARS['assistant']):
         with st.status('Working on it…', expanded=False) as status:
             try:
                 for event in events:
@@ -92,7 +94,7 @@ with st.sidebar:
 # ---------- the conversation ----------
 
 title_col, delete_col = st.columns([5, 1])
-title_col.title('💬 Ask the shop')
+title_col.title('Ask the shop')
 if current and delete_col.button('Delete chat', help='Deletes this chat and its history'):
     if call(api.delete_chat, current):
         st.session_state['chat_id'] = None
@@ -105,19 +107,19 @@ if current:
     history = call(api.chat_history, current)
     if history:
         for message in history['messages']:
-            with st.chat_message(message['role']):
+            with st.chat_message(message['role'], avatar=AVATARS[message['role']]):
                 st.markdown(message['content'])
                 many = len(message['items']) > 1
                 for n, item in enumerate(message['items'], start=1):
-                    record_card(item, number=n if many else None)
+                    record_card(item, key=f'm{message["id"]}-{n}', number=n if many else None)
         pending = history['pending_confirmation']
 else:
     st.caption('Ask for a record ("70s jazz-funk under $40, at least VG+"), about vinyl ("what does VG+ mean?"), '
                'or about your collection ("which Radiohead albums am I missing?").')
 
 if pending:
-    with st.container(border=True):
-        st.markdown(f'**{pending["question"]}**')
+    with st.container(key='pending'):                    # styled as a ticket stub (style.py)
+        st.markdown(f'**🎟️ {pending["question"]}**')
         if pending.get('action') == 'reserve':
             st.caption(f'Held for {pending.get("hold_hours", 48)} hours; pay and collect in the shop.')
         yes, no, _ = st.columns([1, 1, 4])

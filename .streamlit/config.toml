@@ -8,3 +8,51 @@ toolbarMode = "minimal"
 
 [browser]
 gatherUsageStats = false
+
+# ---------- Look: a 1970s record shop ----------
+# Cream sleeve paper, walnut record-crate sidebar, burnt orange + mustard sunset accents,
+# a fat 70s display face for headings, typewriter for prices and codes.
+# One locked appearance (the paper look is the brand), so no light/dark toggle.
+[theme]
+base = "light"
+primaryColor = "#c4501b"              # burnt orange; white button text ≈ 4.6:1
+backgroundColor = "#f3e9d2"           # cream sleeve paper
+secondaryBackgroundColor = "#e8d8b0"  # aged card stock (inputs, chat bubbles)
+textColor = "#2b1d14"                 # espresso ink
+linkColor = "#9a3b12"
+borderColor = "#c9b48a"
+codeBackgroundColor = "#e8d8b0"
+codeTextColor = "#2b1d14"
+orangeColor = "#c4501b"
+yellowColor = "#e3a72f"
+greenColor = "#5b7f3a"
+redColor = "#a8321e"
+blueColor = "#2f6f8f"
+
+font = "'Josefin Sans':https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&display=swap"
+headingFont = "Shrikhand:https://fonts.googleapis.com/css2?family=Shrikhand&display=swap"
+codeFont = "'Courier Prime':https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap"
+baseFontSize = 16
+headingFontWeights = [400, 400, 400, 600, 600, 600]   # Shrikhand has one weight; never fake-bold it
+metricValueFontSize = "2.4rem"
+
+baseRadius = "small"
+buttonRadius = "small"
+showSidebarBorder = false
+
+# Charts: one validated hue (burnt orange passes the dataviz checks on the cream surface).
+chartCategoricalColors = ["#c4501b", "#2f6f8f", "#e3a72f", "#5b7f3a", "#8a4f7d", "#7a5a3a"]
+dataframeHeaderBackgroundColor = "#2b1d14"
+dataframeHeaderTextColor = "#f3e9d2"
+dataframeBorderColor = "#c9b48a"
+
+# The sidebar is the walnut record crate: full contrast set, not only the background.
+[theme.sidebar]
+backgroundColor = "#2b1d14"
+secondaryBackgroundColor = "#3d2a1d"
+textColor = "#f3e9d2"
+linkColor = "#e3a72f"
+borderColor = "#5a4030"
+primaryColor = "#c4501b"
+codeBackgroundColor = "#3d2a1d"
+codeTextColor = "#f3e9d2"

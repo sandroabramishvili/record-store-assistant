@@ -58,6 +58,13 @@ async def test_demand_counts_what_customers_asked_for(client, staff, customer):
     assert longer['searches'] == 5 and longer['genres'] == [{'name': 'jazz', 'count': 3}]
 
 
+async def test_genre_spellings_are_one_row(client, staff, customer):
+    """Seen in a screenshot: "hip hop" and "hip-hop" were two bars in the Genres chart."""
+    await add_logs(customer.id, ({'genres': ['hip-hop']}, 3), ({'genres': ['hip hop']}, 0), ({'genres': ['Hip Hop']}, 0))
+    body = (await client.get('/analytics/demand', headers=staff.headers)).json()
+    assert body['genres'] == [{'name': 'hip-hop', 'count': 3}]                     # first-written spelling
+
+
 async def test_unmet_demand_zero_results_and_most_wanted(client, staff, customer, other_customer, add_copy):
     await add_logs(
         customer.id,

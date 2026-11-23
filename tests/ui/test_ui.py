@@ -18,6 +18,7 @@ sys.path.insert(0, str(UI))
 import api_client  # noqa: E402
 from api_client import ApiError, friendly_message  # noqa: E402
 
+LOGIN_TITLE = 'Step inside, the needle is down'
 CUSTOMER = {'id': 2, 'email': 'jazz.fan@example.com', 'full_name': 'Jazz Fan', 'role': 'customer'}
 STAFF = {'id': 1, 'email': 'staff@example.com', 'full_name': 'Store Staff', 'role': 'staff'}
 CARD = {'id': 57, 'artist': 'Herbie Hancock', 'title': 'Head Hunters', 'year': 1973, 'pressing': 'original',
@@ -117,7 +118,7 @@ def test_login_page_when_logged_out_and_wrong_password_is_a_clear_message(api, m
         raise ApiError(401, 'Incorrect email or password')
     monkeypatch.setattr(api_client, 'login', bad_login)
     at = app()
-    assert at.title[0].value.endswith('Record Store Assistant') and not at.exception
+    assert at.title[0].value == LOGIN_TITLE and not at.exception
     at.text_input[0].input('jazz.fan@example.com')
     at.text_input[1].input('nope')
     at.button[0].click().run()
@@ -131,12 +132,12 @@ def test_customer_cannot_open_staff_pages(api, page):
     (The API refuses staff endpoints with 403 anyway: tests/api.)"""
     at = app(CUSTOMER, page)
     assert not at.exception
-    assert at.title[0].value == '💬 Ask the shop'
+    assert at.title[0].value == 'Ask the shop'
     assert not any(name == 'analytics' for name, *_ in api.calls)
 
 
-@pytest.mark.parametrize('page, title', [('views/staff_inventory.py', '📦 Inventory'),
-                                         ('views/staff_analytics.py', '📊 Analytics')])
+@pytest.mark.parametrize('page, title', [('views/staff_inventory.py', 'Inventory'),
+                                         ('views/staff_analytics.py', 'Analytics')])
 def test_staff_can_open_staff_pages(api, page, title):
     at = app(STAFF, page)
     assert at.title[0].value == title and not at.exception
@@ -166,7 +167,7 @@ def test_server_down_is_a_message_not_a_traceback(api, monkeypatch, page):
 def test_expired_login_goes_back_to_the_login_page(api):
     api.fail['list_chats'] = ApiError(401, 'Not authenticated')
     at = app(CUSTOMER)
-    assert at.title[0].value.endswith('Record Store Assistant')                  # the login page
+    assert at.title[0].value == LOGIN_TITLE                                      # the login page
     assert 'token' not in at.session_state
     assert 'Your session has expired' in texts(at) and not at.exception
     assert 'Your session has expired' in texts(at) and not at.exception
@@ -193,8 +194,9 @@ def test_history_shows_numbered_cards_and_pending_confirmation(api):
                                            'question': 'Reserve Herbie Hancock — Head Hunters for 48 hours?'}
     at = app(CUSTOMER)
     shown = texts(at)
-    assert '**1. Herbie Hancock — Head Hunters**' in shown and '**2. Herbie Hancock — Head Hunters**' in shown
-    assert ':orange[reserved]' in shown                                # current status of a card
+    card = '<span class="rs-track">{}</span><span class="rs-card-title">Herbie Hancock — Head Hunters</span>'
+    assert card.format(1) in shown and card.format(2) in shown          # numbered "tracks" for "the second one"
+    assert '<span class="rs-stamp">reserved</span>' in shown             # current status of a card, as a stamp
     assert 'Reserve Herbie Hancock — Head Hunters for 48 hours?' in shown
     assert at.chat_input[0].disabled                                   # answer the question first (API: 409)
 
@@ -224,6 +226,20 @@ def test_reserving_a_copy_someone_just_took_says_so(api):
     at = app(CUSTOMER, 'views/wantlist.py')
     next(b for b in at.button if b.label == 'Reserve this copy').click().run()
     assert [e.value for e in at.error] == ['Sorry, someone just reserved that copy.'] and not at.exception
+
+
+@pytest.mark.parametrize('given, used', [('http://localhost:8001', 'http://127.0.0.1:8001'),
+                                         ('http://localhost:8001/', 'http://127.0.0.1:8001'),
+                                         ('http://api:8000', 'http://api:8000'),          # Docker: unchanged
+                                         (None, 'http://127.0.0.1:8000')])
+def test_api_url_pins_localhost_to_ipv4(monkeypatch, given, used):
+    """Windows resolves "localhost" to ::1 first; uvicorn listens on IPv4 only, so every UI
+    request waited ~2 s (measured 2.27 s → 0.04 s per call after this fix)."""
+    if given is None:
+        monkeypatch.delenv('API_URL', raising=False)
+    else:
+        monkeypatch.setenv('API_URL', given)
+    assert api_client._api_url() == used
 
 
 def test_friendly_messages():

@@ -5,10 +5,11 @@ import streamlit as st
 
 import api_client as api
 from components import CONDITION_HELP, CONDITIONS, call, money, pressing
+from style import esc
 
 FORMATS = ['LP', 'EP', '7"', '10"', '12"']
 
-st.title('📦 Inventory')
+st.title('Inventory')
 copies_tab, new_tab = st.tabs(['Copies of a record', 'New record'])
 
 with copies_tab:
@@ -23,11 +24,15 @@ with copies_tab:
         if record:
             st.caption(f'{record["label"]} {record["catalog_number"] or ""} · record #{record["id"]}')
             for copy in record['copies']:
-                with st.container(border=True):
-                    head, status_col, actions = st.columns([3, 1, 2])
-                    head.markdown(f'**#{copy["id"]}** · {copy["media_condition"]}/{copy["sleeve_condition"]} · '
-                                  f'**{money(copy["price"])}**' + (f' · {copy["notes"]}' if copy['notes'] else ''))
-                    status_col.caption(copy['status'])
+                with st.container(key=f'card-inv{copy["id"]}'):
+                    head, status_col, actions = st.columns([3, 1, 2], vertical_alignment='center')
+                    head.markdown(f'<span class="rs-card-title">#{copy["id"]}</span> '
+                                  f'<span class="rs-card-meta">{esc(copy["media_condition"])}/{esc(copy["sleeve_condition"])}'
+                                  + (f' · {esc(copy["notes"])}' if copy['notes'] else '')
+                                  + f'</span> &nbsp;<span class="rs-price">{esc(money(copy["price"]))}</span>',
+                                  unsafe_allow_html=True)
+                    status_col.markdown(f'<span class="rs-stamp">{esc(copy["status"].replace("_", " "))}</span>',
+                                        unsafe_allow_html=True)
                     if copy['status'] == 'in_stock' and actions.button('Mark sold', key=f'sold-{copy["id"]}'):
                         if call(api.set_copy_status, copy['id'], 'sold', success='Marked as sold'):
                             st.rerun()
