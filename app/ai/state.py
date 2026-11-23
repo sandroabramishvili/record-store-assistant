@@ -1,6 +1,6 @@
-"""The graph's state (spec 4.1): one dict that every node reads and partially updates.
+"""The graph's state: one dict that every node reads and partially updates.
 
-LangGraph saves this state in a checkpoint after every node (Phase 11: in Postgres),
+LangGraph saves this state in a checkpoint after every node (in Postgres),
 per chat (`thread_id`). The next message in the same chat starts from the saved state.
 
 Two kinds of fields:
@@ -32,7 +32,7 @@ class StoreState(TypedDict, total=False):
     constraints: dict                # what the search currently uses (relax_constraints loosens it)
     refers_to_previous: bool
     reference_index: int | None      # "the second one" → 2
-    reserve_requested: bool          # + "reserve X" with nothing shown → searched first (Phase 14)
+    reserve_requested: bool          # + "reserve X" with nothing shown → searched first
 
     # ---- loaded from the database (load_context) ----
     profile: dict                    # favorite/disliked genres, budget_cap, min_condition

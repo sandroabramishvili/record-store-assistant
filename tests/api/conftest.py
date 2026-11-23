@@ -57,7 +57,7 @@ def test_database() -> None:
     _create_database_if_missing(url)
     # The real migrations, not create_all: this also tests the migrations themselves.
     command.upgrade(Config(str(ROOT / 'alembic.ini')), 'head')
-    # Never call Gemini in tests (spec 12): same text → same vector, no network, no cost.
+    # Never call Gemini in tests: same text → same vector, no network, no cost.
     vectorstores.use_embeddings(DeterministicFakeEmbedding(size=settings.embedding_dimensions))
 
 

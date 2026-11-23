@@ -37,7 +37,7 @@ class ChatMessage(Base):
     role: Mapped[str] = mapped_column(String(20))
     content: Mapped[str] = mapped_column(Text)
     inventory_item_ids: Mapped[list[int]] = mapped_column(ARRAY(Integer), default=list, server_default='{}')
-    # Phase 15: the intent of the turn this assistant reply answers (find_record, off_topic, …),
+    # For analytics: the intent of the turn this assistant reply answers (find_record, off_topic, …),
     # set on the FIRST reply of a turn only (not on the answer after a confirmation), so
     # GROUP BY intent counts customer requests. NULL for user rows and resumed turns.
     intent: Mapped[str | None] = mapped_column(String(30), index=True)

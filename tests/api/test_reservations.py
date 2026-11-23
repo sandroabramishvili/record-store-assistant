@@ -25,7 +25,7 @@ async def reserve(client, user, item_id):
 
 
 async def test_double_reservation_returns_409(client, customer, other_customer, add_copy):
-    """Spec: reserving a copy that is already reserved → 409; only one reservation exists."""
+    """Reserving a copy that is already reserved → 409; only one reservation exists."""
     item = await add_copy()
     assert (await reserve(client, customer, item)).status_code == 201
 
@@ -49,7 +49,7 @@ async def test_parallel_reservations_exactly_one_wins(client, make_customers, ad
 
 
 async def test_reservation_limit(client, customer, add_copy):
-    """Spec: a 4th active reservation is rejected."""
+    """A 4th active reservation is rejected."""
     items = [await add_copy() for _ in range(4)]
     for item in items[:3]:
         assert (await reserve(client, customer, item)).status_code == 201

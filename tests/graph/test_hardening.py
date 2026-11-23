@@ -1,4 +1,4 @@
-"""Phase 14 (spec 11) in the graph: invalid LLM output, history size, prompt injection.
+"""Hardening in the graph: invalid LLM output, history size, prompt injection.
 
 No database, no Gemini: FakeLLM + FakeRepo.
 """
@@ -66,7 +66,7 @@ async def test_unparseable_answer_goes_straight_to_the_fallback_template():
 
 async def test_empty_structured_output_counts_as_invalid():
     """A model that answers with plain text gives None from the parser: retried like bad JSON
-    (before Phase 14 this crashed with AttributeError on `analysis.constraints`)."""
+    (before this fix it crashed with AttributeError on `analysis.constraints`)."""
     graph, llm, _ = graph_with(Reply(RequestAnalysis, lambda messages: None), understood('off_topic'))
     state = await ask(graph, 'weather?')
     assert state['intent'] == 'off_topic' and len(llm.calls) == 2

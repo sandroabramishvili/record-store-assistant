@@ -1,4 +1,4 @@
-"""The 20 minimum tests from spec section 12 exist under their exact names.
+"""The 20 core tests exist under their exact names.
 
 A rename or deletion would otherwise go unnoticed until the defense. Where each one lives:
 
@@ -18,7 +18,7 @@ A rename or deletion would otherwise go unnoticed until the defense. Where each 
 import ast
 from pathlib import Path
 
-SPEC_TESTS = {
+CORE_TESTS = {
     'test_filter_drops_sold_and_reserved', 'test_filter_drops_owned_records', 'test_filter_budget_cap_is_hard',
     'test_filter_min_condition', 'test_name_normalization', 'test_taste_score', 'test_relax_never_touches_hard_rules',
     'test_relax_loop_limit', 'test_verify_rejects_unavailable_item', 'test_verify_rejects_invented_price',
@@ -29,11 +29,11 @@ SPEC_TESTS = {
 }
 
 
-def test_all_spec_tests_exist():
+def test_all_core_tests_exist():
     defined = set()
     for path in Path(__file__).parent.rglob('test_*.py'):
         for node in ast.walk(ast.parse(path.read_text(encoding='utf-8'))):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 defined.add(node.name)
-    assert len(SPEC_TESTS) == 20
-    assert SPEC_TESTS - defined == set()
+    assert len(CORE_TESTS) == 20
+    assert CORE_TESTS - defined == set()

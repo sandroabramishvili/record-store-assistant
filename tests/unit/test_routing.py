@@ -1,4 +1,4 @@
-"""Every routing decision of the graph (10.5), as a table. Pure functions, no graph needed."""
+"""Every routing decision of the graph, as a table. Pure functions, no graph needed."""
 
 import pytest
 from langgraph.graph import END
@@ -38,7 +38,7 @@ def test_after_context(intent, node):
     ([{'item_id': 1}], 2, 'compose_answer'),          # found after relaxing
     ([], 0, 'relax_constraints'),
     ([], 1, 'relax_constraints'),
-    ([], 2, 'offer_wantlist'),                       # spec: at most 2 relaxations
+    ([], 2, 'offer_wantlist'),                       # at most 2 relaxations
 ])
 def test_after_filter(available, attempts, node):
     assert route_after_filter({'available_items': available, 'relax_attempts': attempts}) == node
@@ -58,7 +58,7 @@ def test_after_prepare(pending, node):
 @pytest.mark.parametrize(('issues', 'attempts', 'node'), [
     ([], 1, END), ([], 2, END),
     (['bad price'], 1, 'compose_answer'),            # one retry with the issues
-    (['bad price'], 2, 'fallback_template'),         # spec: two failures → template
+    (['bad price'], 2, 'fallback_template'),         # two failures → template
 ])
 def test_after_verify(issues, attempts, node):
     assert route_after_verify({'answer_issues': issues, 'answer_attempts': attempts}) == node

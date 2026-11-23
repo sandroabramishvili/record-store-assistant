@@ -27,7 +27,7 @@ async def search(constraints=None, profile=None, **kwargs):
 
 
 async def test_strict_filters_are_never_violated(catalog):
-    """Guide "Done when": every combination of price / condition / decade / format / original-only."""
+    """Every combination of price / condition / decade / format / original-only."""
     prices, grades, decades = [None, 25, 40, 100], [None, 'VG', 'VG+', 'NM'], [None, 1950, 1970, 1990]
     formats, originals = [None, 'LP', '7"'], [False, True]
     checked = 0
@@ -50,7 +50,7 @@ async def test_profile_budget_and_condition_are_hard(catalog):
     assert results and all(r['price'] <= 30 and meets_minimum(r['media_condition'], 'NM') for r in results)
 
 
-async def test_spec_demo_70s_jazz_funk(catalog):
+async def test_demo_70s_jazz_funk(catalog):
     results = await search({'query_text': '70s jazz-funk', 'decade': 1970, 'max_price': 40, 'min_condition': 'VG+',
                             'original_pressing_only': True, 'genres': ['jazz-funk']})
     titles = {r['title'] for r in results}

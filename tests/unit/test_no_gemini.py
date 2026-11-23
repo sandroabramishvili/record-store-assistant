@@ -1,4 +1,4 @@
-"""Proof that the test suite never calls Gemini (spec 12, guide 12 "Done when").
+"""Proof that the test suite never calls Gemini.
 
 tests/conftest.py blanks GOOGLE_API_KEY for the whole run. So if any test (or code under
 test) tried to build the real chat model or the real embeddings, it would fail right here,

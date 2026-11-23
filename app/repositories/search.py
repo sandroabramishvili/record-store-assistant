@@ -1,4 +1,4 @@
-"""Hybrid inventory search (spec 4.3 `search_inventory`, 8.7): SQL first, vectors second, taste third.
+"""Hybrid inventory search: SQL first, vectors second, taste third.
 
 1. SQL keeps only copies that CAN be sold under the strict conditions (in stock, price,
    condition, format, decade, original pressing, genres, artists).
@@ -6,7 +6,7 @@
 3. The taste score nudges the order toward the customer's profile.
 
 The result is a list of candidate COPIES (flat dicts). The graph then passes them through
-`filter_available` (Phase 5), which stays the final authority on the store rules.
+`filter_available`, which stays the final authority on the store rules.
 """
 
 import logging

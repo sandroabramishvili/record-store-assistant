@@ -1,4 +1,4 @@
-"""LangSmith tracing (Phase 13), checked offline.
+"""LangSmith tracing, checked offline.
 
 A real langsmith Client with our anonymizer, but its HTTP session is replaced by one that
 records what WOULD be sent. So these tests see exactly the bytes LangSmith would receive:

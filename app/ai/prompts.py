@@ -1,6 +1,6 @@
 """All prompts, plus the functions that assemble them into messages.
 
-Rules that matter for safety (spec 11):
+Rules that matter for safety:
 - The customer's text is always inside <customer_message> tags and is DATA, never
   instructions. Angle brackets in it are neutralized, so it can't close the tag.
 - Everything the LLM may talk about (available copies, knowledge chunks) is passed as

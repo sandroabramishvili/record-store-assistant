@@ -1,0 +1,7 @@
+# The UI talks to the API over HTTP only, so its image needs just these (no LangChain, no DB
+# drivers). Installed with the project lock file as constraints, so every transitive version
+# is the one tested locally:  pip install -r ui/requirements.txt -c requirements.lock.txt
+streamlit
+httpx
+pandas
+altair

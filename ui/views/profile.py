@@ -1,4 +1,4 @@
-"""Taste profile (GET/PUT /profile). The ONLY way to change it: the chat can't (spec 11)."""
+"""Taste profile (GET/PUT /profile). The ONLY way to change it: the chat can't."""
 
 import streamlit as st
 

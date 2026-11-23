@@ -22,7 +22,7 @@ def test_same_key(a, b):
 
 
 def test_name_normalization():
-    """Spec: "The Beatles", "beatles " and "BEATLES" match the same collection entry."""
+    """Same artist: "The Beatles", "beatles " and "BEATLES" match the same collection entry."""
     variants = ['The Beatles', 'beatles ', 'BEATLES', 'Beatles, The']
     assert {normalize_name(v) for v in variants} == {'beatles'}
 

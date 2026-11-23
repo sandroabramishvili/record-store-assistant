@@ -1,4 +1,4 @@
-"""Answer verification (spec 4.5): code checks the LLM's draft before the customer sees it.
+"""Answer verification: code checks the LLM's draft before the customer sees it.
 
 Checking that an id is in a list or that a number equals a price is deterministic,
 so it's done in Python, not by a second LLM. Each problem becomes one readable
@@ -25,7 +25,7 @@ STOCK_CLAIM_RE = re.compile(
     re.IGNORECASE,
 )
 # A sentence that DENIES stock ("we don't have Nevermind right now", "it's not available")
-# is honest, not a false claim. Found in the first real graph run (Phase 10.4).
+# is honest, not a false claim. Found in the first real graph run.
 NEGATION_RE = re.compile(
     r"\b(not|no|never|don't|doesn't|isn't|aren't|wasn't|haven't|hasn't|can't|cannot|no longer|sold out|out of stock)\b"
     r"|n't\b",

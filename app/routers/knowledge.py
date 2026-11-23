@@ -1,4 +1,4 @@
-"""Knowledge base (spec 7.8), staff only. Every change re-indexes the article's chunks.
+"""Knowledge base, staff only. Every change re-indexes the article's chunks.
 
 Unlike releases, an article that can't be indexed returns an error: the article's
 whole purpose is to be found by the assistant, so a silent failure would hide it.

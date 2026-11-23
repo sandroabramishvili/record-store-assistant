@@ -1,4 +1,4 @@
-"""Staff analytics (Phase 15, spec 7.9): exact numbers from known rows, and staff-only access."""
+"""Staff analytics: exact numbers from known rows, and staff-only access."""
 
 from datetime import timedelta
 

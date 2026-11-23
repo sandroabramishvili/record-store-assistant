@@ -1,9 +1,9 @@
-"""Streamlit UI (Phase 16), run headless with streamlit.testing.AppTest.
+"""Streamlit UI, run headless with streamlit.testing.AppTest.
 
 No API server: the functions of ui/api_client.py are replaced by a fake. That is the point
 of having ONE api client: the pages only ever talk to it. Checked here: role-based pages,
 the chat (hint, history cards, Confirm / Cancel), friendly errors, and that no page ever
-shows an exception (spec 10: no tracebacks).
+shows an exception (no tracebacks).
 """
 
 import sys

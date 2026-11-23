@@ -1,4 +1,4 @@
-"""Staff analytics (spec 7.9). Staff only: the whole router requires the staff role.
+"""Staff analytics. Staff only: the whole router requires the staff role.
 
 All four endpoints take `days` (the window, default 30) and are thin: the SQL lives in
 app/repositories/analytics.py.

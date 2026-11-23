@@ -1,4 +1,4 @@
-"""Taste score (spec section 8, point 8): how well a release fits the customer, 0.0 – 1.0. Computed by code."""
+"""Taste score: how well a release fits the customer, 0.0 – 1.0. Computed by code."""
 
 from collections.abc import Iterable
 

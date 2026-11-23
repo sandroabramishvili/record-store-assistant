@@ -20,7 +20,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
-    # Added by hand: PGVector (Phase 6) stores embeddings in a `vector` column.
+    # Added by hand: PGVector stores embeddings in a `vector` column.
     # Autogenerate never detects extensions.
     op.execute('CREATE EXTENSION IF NOT EXISTS vector')
 

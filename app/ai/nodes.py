@@ -1,7 +1,7 @@
-"""The graph's nodes (spec 4.3), as methods of one class that holds `Deps`.
+"""The graph's nodes, as methods of one class that holds `Deps`.
 
 Each node reads the state and returns ONLY the fields it changes. Nodes never open DB
-sessions or create models: everything external goes through `self.deps` (10.1).
+sessions or create models: everything external goes through `self.deps`.
 This module imports nothing that loads the configuration or the database, so the nodes
 can be tested with a fake LLM and a fake repository.
 
@@ -93,7 +93,7 @@ def money_or_none(value: Any) -> Decimal | None:
 def keep_recent(state: StoreState, new_message: AIMessage) -> list[AnyMessage]:
     """The `messages` update that ends a turn: the answer, plus RemoveMessage for the oldest
     messages beyond MAX_STORED_MESSAGES. The prompts only ever use the last few turns
-    (prompts.HISTORY_TURNS), so older ones only made every checkpoint bigger (spec 4.1)."""
+    (prompts.HISTORY_TURNS), so older ones only made every checkpoint bigger."""
     stored = state.get('messages') or []
     overflow = len(stored) + 1 - MAX_STORED_MESSAGES
     return [RemoveMessage(id=m.id) for m in stored[:max(overflow, 0)] if m.id] + [new_message]
@@ -162,7 +162,7 @@ class Nodes:
         return {'candidates': found}
 
     async def availability_filter(self, state: StoreState) -> dict:
-        """The store rules (Phase 5), the last gate: only these copies may reach the LLM."""
+        """The store rules (services/availability.py), the last gate: only these copies may reach the LLM."""
         ctx = CustomerContext.from_state(state)
         available = filter_available(
             state.get('candidates') or [],
@@ -247,9 +247,9 @@ class Nodes:
         return {'pending_action': action}
 
     async def confirm_action(self, state: StoreState) -> dict:
-        """Pause the graph and ask the customer. Resumes with Command(resume=...) (Phase 11)."""
+        """Pause the graph and ask the customer. Resumes with Command(resume=...) from the /confirm endpoint."""
         action = state['pending_action']
-        # Spec 7.7 SSE shape: {"type": "confirmation_required", "action": "reserve", ...details}
+        # The SSE event shape: {"type": "confirmation_required", "action": "reserve", ...details}
         answer = interrupt({**action, 'type': 'confirmation_required', 'action': action['type']})
         confirmed = answer.get('confirmed') if isinstance(answer, dict) else answer
         return {'confirmed': confirmed is True}
@@ -418,7 +418,7 @@ class Nodes:
         }
 
     async def _log_search(self, state: StoreState, results: int, relax_attempts: int | None = None) -> None:
-        """SearchLog row (spec 6.9). Never lets a logging problem break the chat."""
+        """SearchLog row. Never lets a logging problem break the chat."""
         if state.get('intent') != 'find_record':
             return
         attempts = min(state.get('relax_attempts', 0) if relax_attempts is None else relax_attempts, MAX_RELAX_ATTEMPTS)

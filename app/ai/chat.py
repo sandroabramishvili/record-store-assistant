@@ -1,8 +1,8 @@
-"""Running the graph for one HTTP request and streaming it as Server-Sent Events (guide 11.3).
+"""Running the graph for one HTTP request and streaming it as Server-Sent Events.
 
-One chat session = one LangGraph thread: thread_id = f'chat-{session.id}' (spec 3).
+One chat session = one LangGraph thread: thread_id = f'chat-{session.id}'.
 
-What the customer sees (spec 7.7), one `data: {...}` line per event:
+What the customer sees, one `data: {...}` line per event:
     {"type": "node", "name": "search_inventory"}         progress, while the graph runs
     {"type": "confirmation_required", "action": ...}     the graph paused (interrupt)
     {"type": "answer", "message": ..., "items": [...]}   the VERIFIED answer, sent once
@@ -10,7 +10,7 @@ What the customer sees (spec 7.7), one `data: {...}` line per event:
     {"type": "done"}                                     always last
 
 The LLM's tokens are never streamed: verify_answer checks the whole answer first, so an
-invented price never reaches the screen (spec 7.7 note).
+invented price never reaches the screen.
 
 ChatMessage rows (the UI's history) are written here, each in its OWN database session:
 the response streams after the endpoint has returned, when the request's session is closed.
@@ -63,7 +63,7 @@ def make_config(session_id: int, user: User) -> RunnableConfig:
 
 
 def tag_with_intent(config: RunnableConfig, values: dict) -> None:
-    """Spec 9: session_id + environment are metadata from the start; the intent becomes a tag
+    """session_id + environment are metadata from the start; the intent becomes a tag
     (`intent:find_record`) on the root run once the run is over."""
     intent = values.get('intent') or 'unknown'
     tag_run(config['run_id'], [*config['tags'], f'intent:{intent}'])
@@ -141,7 +141,7 @@ def error_message(error: Exception, values: dict) -> str:
 # Two requests for the same chat must not run the graph at the same time: a double-clicked
 # "Confirm" would resume the same pause twice (the 2nd reservation then fails and the
 # customer sees "failed" for a hold that worked). In-process registry: correct for the one
-# uvicorn worker this app runs with (Docker, Phase 17). With several workers it would need a
+# uvicorn worker this app runs with (see the Dockerfile). With several workers it would need a
 # Postgres advisory lock instead.
 _busy: dict[int, float] = {}           # session id → monotonic time its run started
 

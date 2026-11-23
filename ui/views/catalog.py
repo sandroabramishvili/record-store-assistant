@@ -1,5 +1,5 @@
 """Browse the catalog (GET /records) and reserve a copy directly (POST /reservations:
-the same reservation service the chat uses, spec 7.6)."""
+the same reservation service the chat uses)."""
 
 import streamlit as st
 

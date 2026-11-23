@@ -73,7 +73,7 @@ class StoreRepository:
     # ---------- search ----------
 
     async def search(self, constraints: dict, ctx: CustomerContext, *, limit: int = 20) -> list[dict]:
-        """Hybrid search (Phase 8). Candidates still need filter_available."""
+        """Hybrid search (repositories/search.py). Candidates still need filter_available."""
         async with self.session() as db:
             found = await search_inventory(
                 db, self.records, constraints, ctx.profile,
@@ -95,7 +95,7 @@ class StoreRepository:
 
     async def log_search(self, user_id: int, intent: str, constraints: dict, results_count: int,
                          relax_attempts: int) -> None:
-        """One row per search (spec 6.9); zero-result rows show staff what customers miss."""
+        """One row per search; zero-result rows show staff what customers miss."""
         async with self.session() as db:
             db.add(SearchLog(user_id=user_id, intent=intent, constraints=constraints,
                              results_count=results_count, relax_attempts=relax_attempts))
@@ -110,7 +110,7 @@ class StoreRepository:
                 Reservation.user_id == user_id, Reservation.status == 'active'))
 
     async def reserve(self, user_id: int, item_id: int) -> dict:
-        """THE reservation service (6.2). Raises ReservationError subclasses on failure."""
+        """THE reservation service (services/reservations.py). Raises ReservationError subclasses on failure."""
         async with self.session() as db:
             r = await reserve_item(db, user_id, item_id)
         return {'reservation_id': r.id, 'inventory_item_id': r.inventory_item_id,
@@ -141,7 +141,7 @@ class StoreRepository:
 
     async def search_knowledge(self, query: str, *, k: int | None = None,
                                min_score: float | None = None) -> list[dict]:
-        """Top chunks above the score threshold (spec 8.9). Empty = the KB has no answer."""
+        """Top chunks above the score threshold. Empty = the KB has no answer."""
         k = k or settings.knowledge_top_k
         min_score = settings.knowledge_min_score if min_score is None else min_score
         hits = await self.knowledge.asimilarity_search_with_score(query, k=k)
@@ -189,7 +189,7 @@ class StoreRepository:
             return await catalog_tags(db)
 
     async def catalog_titles(self) -> dict[str, list[int]]:
-        """title_norm → record ids, for verify_draft's "in stock" claim check (Phase 5)."""
+        """title_norm → record ids, for verify_draft's "in stock" claim check."""
         async with self.session() as db:
             rows = (await db.execute(select(Record.title_norm, Record.id))).all()
         titles: dict[str, list[int]] = {}

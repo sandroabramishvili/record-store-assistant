@@ -27,7 +27,7 @@ def test_verify_rejects_unavailable_item():
 
 
 def test_verify_rejects_invented_price():
-    """Spec: "$25" when the featured copy costs $38.00 fails; "$38" passes."""
+    """Prices: "$25" when the featured copy costs $38.00 fails; "$38" passes."""
     assert check('This NM copy is $25.') == ["amount '$25' does not match any featured price"]
     assert check('This NM copy is $38.') == []
     assert check('This NM copy is $38.00.') == []

@@ -1,4 +1,4 @@
-"""Record Store Assistant: Streamlit UI (spec 10).
+"""Record Store Assistant: Streamlit UI.
 
     streamlit run ui/app.py            (API_URL defaults to http://localhost:8000)
 

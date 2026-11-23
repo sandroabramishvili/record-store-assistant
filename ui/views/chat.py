@@ -1,4 +1,4 @@
-"""Chat with the assistant (spec 10): history, live node progress, record cards, Confirm / Cancel.
+"""Chat with the assistant: history, live node progress, record cards, Confirm / Cancel.
 
 The server is the source of truth: after every turn the page reloads the history from
 GET /chat/sessions/{id}/messages (answers, cards with CURRENT stock status, and a question

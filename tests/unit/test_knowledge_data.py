@@ -1,4 +1,4 @@
-"""The knowledge-base files must satisfy spec 8.3 and parse like the API validates them."""
+"""The knowledge-base files must cover the required topics and parse like the API validates them."""
 
 import pytest
 
@@ -18,8 +18,8 @@ def test_every_topic_is_covered():
 
 
 @pytest.mark.parametrize('keyword', ['Goldmine', 'reissue', 'runout', '180', 'clean', 'store', '45 RPM', 'turntable'])
-def test_spec_subjects_are_present(keyword):
-    """Spec 8.3 lists grading, pressings, runouts, 180g, cleaning, storing, speeds, first turntable."""
+def test_required_subjects_are_present(keyword):
+    """Required topics: grading, pressings, runouts, 180g, cleaning, storing, speeds, first turntable."""
     assert any(keyword.lower() in (a.title + a.content).lower() for a in ARTICLES), keyword
 
 

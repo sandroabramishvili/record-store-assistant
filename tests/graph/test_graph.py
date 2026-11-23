@@ -1,4 +1,4 @@
-"""The whole graph, stage by stage in the guide's build order (10.4), with FakeLLM + FakeRepo.
+"""The whole graph, stage by stage (as in app/ai/graph.py), with FakeLLM + FakeRepo.
 
 Each test runs the compiled graph (real wiring, real routing, real interrupt) and checks
 which path it took, what the LLM saw and what ended up in the state.
@@ -75,7 +75,7 @@ async def test_b_rejected_draft_is_retried_with_the_issues():
 
 
 async def test_verify_fallback_after_two_failures():
-    """Spec test: two failed verifications → fallback_template; the answer contains only real data."""
+    """Two failed verifications → fallback_template; the answer contains only real data."""
     graph, llm, _, config = setup(understood(max_price=40), draft('Only $5!', 57), draft('We have item 999.', 999),
                                   items=(HEAD_HUNTERS, BLACK_BYRD))
     state = await ask(graph, config, 'jazz-funk')
@@ -105,7 +105,7 @@ async def test_c_relax_raises_price_and_the_answer_says_so():
 
 
 async def test_relax_loop_limit():
-    """Spec test: the relax loop runs at most 2 times, then goes to offer_wantlist."""
+    """The relax loop runs at most 2 times, then goes to offer_wantlist."""
     graph, _, repo, config = setup(understood(max_price=5, decade=1970, genres=['jazz-funk'], artists=['Nirvana'],
                                               titles=['Nevermind']), items=())
     state = await ask(graph, config, 'Nevermind original?')
@@ -155,7 +155,7 @@ async def two_turns_then_reserve(resume, *later):
 
 
 async def test_reservation_requires_confirmation():
-    """Spec test: nothing is reserved until the customer confirms; on cancel nothing is written."""
+    """Nothing is reserved until the customer confirms; on cancel nothing is written."""
     state, repo, _ = await two_turns_then_reserve({'confirmed': False}, draft('No problem, nothing reserved.'))
     assert repo.reserved == [] and state['action_result']['status'] == 'cancelled'
 
@@ -165,9 +165,9 @@ async def test_reservation_requires_confirmation():
 
 
 async def test_interrupt_and_resume():
-    """Spec test: the graph pauses and finishes after resume.
+    """The graph pauses and finishes after resume.
 
-    Guide 10.6: on resume the paused node runs again from the top. Only confirm_action
+    LangGraph rule: on resume the paused node runs again from the top. Only confirm_action
     re-runs; the checks in prepare_reservation and the write in execute_action happen once.
     """
     graph, _, repo, config = setup(understood(), draft('Two picks.', 57, 58),

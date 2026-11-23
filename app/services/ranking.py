@@ -1,4 +1,4 @@
-"""Final ranking of search results (spec section 8, points 7-8). Pure functions, unit-tested.
+"""Final ranking of search results. Pure functions, unit-tested.
 
 final score = SIMILARITY_WEIGHT × similarity (rescaled) + TASTE_WEIGHT × taste score
 

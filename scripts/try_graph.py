@@ -1,13 +1,13 @@
-"""Talk to the real graph (Gemini + the dev database) from the terminal (guide 10.4).
+"""Talk to the real graph (Gemini + the dev database) from the terminal.
 
     python -m scripts.try_graph --user jazz.fan@example.com          # interactive chat
-    python -m scripts.try_graph --demo                                # spec section 12 messages
+    python -m scripts.try_graph --demo                                # the demo messages
 
 For every message it prints the nodes that ran, the answer, and the numbered cards.
 Confirmations (reserve / wantlist) are asked interactively, or answered by the demo
 script. Reservations made during --demo are cancelled at the end (use --keep to keep them).
 
-Uses InMemorySaver (state lives only while the script runs); the app uses Postgres (Phase 11).
+Uses InMemorySaver (state lives only while the script runs); the app uses Postgres.
 On a Gemini rate limit (429) it waits and resumes the graph from the node that failed.
 """
 
@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--user', default='jazz.fan@example.com')
-    parser.add_argument('--demo', action='store_true', help='run the spec section 12 messages')
+    parser.add_argument('--demo', action='store_true', help='run the demo messages')
     parser.add_argument('--keep', action='store_true', help="don't cancel reservations made by this run")
     logging.basicConfig(level=logging.WARNING)
     run_loop(main(parser.parse_args()))

@@ -1,4 +1,4 @@
-"""The LangGraph checkpointer in Postgres (guide 11.1).
+"""The LangGraph checkpointer in Postgres.
 
 After every node, LangGraph saves the graph's state for the chat's thread here. That is
 what makes the chat remember "the second one" between HTTP requests, and what lets a

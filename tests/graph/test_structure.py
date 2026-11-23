@@ -1,11 +1,11 @@
-"""The graph's wiring matches spec 4.2 (plus three documented additions). Guards against drift."""
+"""The graph's wiring matches the design (plus the documented additions). Guards against drift."""
 
 from app.ai.graph import NODE_NAMES
 from scripts.draw_graph import _NoLLM, build_graph, mermaid
 from app.ai.deps import Deps
 
-# (source, target, conditional?) — the spec 4.2 diagram as edges
-SPEC_EDGES = {
+# (source, target, conditional?) — the designed graph as edges
+DESIGN_EDGES = {
     ('__start__', 'understand_request', False),
     ('understand_request', 'polite_refusal', True), ('understand_request', 'load_context', True),
     ('polite_refusal', '__end__', False),
@@ -25,7 +25,7 @@ SPEC_EDGES = {
     ('verify_answer', 'compose_answer', True), ('verify_answer', 'fallback_template', True),
     ('verify_answer', '__end__', True), ('fallback_template', '__end__', False),
 }
-# Deliberate differences (see build_guide 10.4 "As built"):
+# Deliberate additions to the original design, each explained on its line:
 ADDITIONS = {
     ('relax_constraints', 'offer_wantlist', True),        # nothing left to loosen: no pointless search
     ('offer_wantlist', 'compose_answer', True),           # nothing to confirm (no artist)
@@ -35,10 +35,10 @@ ADDITIONS = {
 }
 
 
-def test_edges_match_spec_plus_documented_additions():
+def test_edges_match_design_plus_documented_additions():
     drawn = build_graph(Deps(llm=_NoLLM(), repo=None)).get_graph()
     edges = {(e.source, e.target, e.conditional) for e in drawn.edges}
-    assert edges == SPEC_EDGES | ADDITIONS
+    assert edges == DESIGN_EDGES | ADDITIONS
 
 
 def test_every_node_is_in_the_diagram():

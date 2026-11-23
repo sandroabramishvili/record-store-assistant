@@ -1,10 +1,10 @@
-"""Staff analytics (spec 7.9): every number is one SQL aggregation (GROUP BY / COUNT), never
+"""Staff analytics: every number is one SQL aggregation (GROUP BY / COUNT), never
 rows counted in Python.
 
 Sources:
 - search_logs    one row per assistant SEARCH, with the constraints the customer ASKED for
                  (request_constraints, never the relaxed ones) and how many copies came back.
-- chat_messages  `intent` on the first assistant reply of every turn (Phase 15), so EVERY
+- chat_messages  `intent` on the first assistant reply of every turn, so EVERY
                  request is counted, also off-topic ones that never search.
 - reservations / wantlist_items  as they are.
 
@@ -107,7 +107,7 @@ async def most_wanted(db: AsyncSession, limit: int) -> list[dict]:
 async def reservation_stats(db: AsyncSession, since: ColumnElement) -> dict:
     """Reservations created in the window, by CURRENT status (one row, COUNT … FILTER).
 
-    release_expired first: expiry is lazy (Phase 6), so without it holds past their
+    release_expired first: expiry is lazy (services/reservations.py), so without it holds past their
     48 h would still be counted as active.
     """
     await release_expired(db)

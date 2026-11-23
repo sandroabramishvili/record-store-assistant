@@ -107,7 +107,7 @@ async def test_offer_wantlist_finds_the_artist_of_a_catalog_title():
 # ---------- reservation ----------
 
 async def test_reference_index_resolved_by_code():
-    """Spec test: "the second one" maps to shown_item_ids[1]; out of range reserves nothing."""
+    """Reference by position: "the second one" maps to shown_item_ids[1]; out of range reserves nothing."""
     nodes, _, repo = make()
     out = await nodes.prepare_reservation(turn(shown_item_ids=[57, 58], reference_index=2))
     assert out['pending_action']['inventory_item_id'] == 58 and out['pending_action']['price'] == '32.00'

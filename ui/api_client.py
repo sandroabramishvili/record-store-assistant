@@ -1,4 +1,4 @@
-"""Every call from the UI to the FastAPI backend lives here (spec 10: one place, not per page).
+"""Every call from the UI to the FastAPI backend lives here (one place, not per page).
 
 The UI never touches the database or the graph. The JWT is kept in st.session_state and
 sent with every request; the backend decides what the user may do (roles, ownership),
@@ -103,7 +103,7 @@ def _stream(path: str, body: dict) -> Iterator[dict]:
 
 
 def friendly_message(error: ApiError) -> str:
-    """What the customer reads (spec 10: clear messages for 401, 403, 404, 409, timeouts)."""
+    """What the customer reads (clear messages for 401, 403, 404, 409, timeouts)."""
     if error.status == 0:
         return error.message
     if error.status == 401:

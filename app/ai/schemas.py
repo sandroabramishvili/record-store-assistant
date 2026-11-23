@@ -1,4 +1,4 @@
-"""Structured outputs (spec section 5): what the LLM must return, as Pydantic models.
+"""Structured outputs: what the LLM must return, as Pydantic models.
 
 The field descriptions are sent to the model as part of the JSON schema, so they are
 instructions too. Validation runs on every response; an invalid one is retried
@@ -17,7 +17,7 @@ Format = Literal['LP', 'EP', '7"', '10"', '12"']
 
 class SearchConstraints(BaseModel):
     artists: list[str] = Field(default_factory=list, description='Artists the customer explicitly mentioned, as written')
-    # Not in the spec: without it "Do you have Nevermind?" loses the album name, so search
+    # Needed: without it "Do you have Nevermind?" loses the album name, so search
     # can't look for that album and the wantlist entry would have no title.
     titles: list[str] = Field(
         default_factory=list, description='Album or single titles the customer explicitly mentioned, as written')

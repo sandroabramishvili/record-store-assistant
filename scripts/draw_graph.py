@@ -1,4 +1,4 @@
-"""Write the graph's Mermaid diagram to docs/graph.md (guide 10.7). No Gemini, no database.
+"""Write the graph's Mermaid diagram to docs/graph.md. No Gemini, no database.
 
     python -m scripts.draw_graph
 

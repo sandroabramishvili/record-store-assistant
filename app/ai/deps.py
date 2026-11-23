@@ -1,8 +1,8 @@
-"""Deps: the only way graph nodes reach the outside world (guide 10.1).
+"""Deps: the only way graph nodes reach the outside world.
 
 Nodes get an LLM and a repository here and never create either themselves. In the
 app, `build_deps()` wires the real Gemini model and the real database; tests pass a
-fake LLM (Phase 12) and a repository pointing at the test database.
+fake LLM and a repository pointing at the test database.
 """
 
 from dataclasses import dataclass

@@ -1,4 +1,4 @@
-"""The seed data must satisfy the spec (8.1) and the API's own validation.
+"""The seed data must meet the catalog requirements and the API's own validation.
 
 Runs without a database: it only reads the JSON files and the Pydantic schemas.
 """
@@ -59,7 +59,7 @@ def test_demo_users_pass_api_validation():
             WantlistCreate.model_validate(item)
 
 
-# ---------- spec 8.1 ----------
+# ---------- catalog requirements ----------
 
 def test_minimum_sizes():
     assert len(RECORDS) >= 40
@@ -93,7 +93,7 @@ def test_some_releases_have_several_copies_in_different_grades():
     assert len(multi) >= 5
 
 
-# ---------- the demo scenarios (spec section 12) have data ----------
+# ---------- the demo scenarios have data ----------
 
 def by(artist, title=None):
     return [r for r in RECORDS if normalize_name(r['artist']) == normalize_name(artist)

@@ -1,4 +1,4 @@
-"""Turning catalog rows and articles into vectors (spec 8, points 4-6).
+"""Turning catalog rows and articles into vectors.
 
 Releases: one release = one document (short enough, no chunking), id `record-{id}`.
 Articles: split into overlapping chunks, ids `kb-{article_id}-{n}`.
@@ -19,8 +19,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 logger = logging.getLogger(__name__)
 
-CHUNK_SIZE = 700       # characters; spec: 500-800
-CHUNK_OVERLAP = 90     # spec: 80-100, so a sentence cut at a boundary appears in both chunks
+CHUNK_SIZE = 700       # characters (500-800 works well)
+CHUNK_OVERLAP = 90     # 80-100 is enough, so a sentence cut at a boundary appears in both chunks
 _splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
 
 # ---------- rate limits ----------
@@ -81,7 +81,7 @@ def record_to_text(r: Any) -> str:
 
 
 def record_metadata(r: Any) -> dict:
-    """Stored next to the vector (JSONB), used to filter the search (Phase 8)."""
+    """Stored next to the vector (JSONB), used to filter the search."""
     return {
         'record_id': r.id,
         'artist_norm': r.artist_norm,

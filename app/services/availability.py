@@ -1,4 +1,4 @@
-"""The store's hard rules (spec 4.4): the last gate before a copy is shown to a customer.
+"""The store's hard rules: the last gate before a copy is shown to a customer.
 
 Pure function: everything comes in as arguments, nothing is read from the DB or an LLM.
 The LLM can only talk about copies that survive this filter.

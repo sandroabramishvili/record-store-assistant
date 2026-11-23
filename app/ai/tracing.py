@@ -1,4 +1,4 @@
-"""LangSmith tracing (spec 9, guide 13).
+"""LangSmith tracing.
 
 Every chat turn becomes one trace: the root run `chat_turn`, one child per graph node,
 the two LLM calls inside. Turned on by LANGSMITH_TRACING=true + LANGSMITH_API_KEY in .env.

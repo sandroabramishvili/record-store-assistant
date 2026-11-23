@@ -7,7 +7,7 @@ RECORD = {'artist': 'Kraftwerk', 'title': 'Autobahn', 'label': 'Philips', 'relea
 
 
 async def test_staff_only_inventory_crud(client, customer, staff):
-    """Spec: a customer cannot call POST /inventory or POST /records."""
+    """A customer cannot call POST /inventory or POST /records."""
     assert (await client.post('/records', headers=customer.headers, json=RECORD)).status_code == 403
     record_id = (await client.post('/records', headers=staff.headers, json=RECORD)).json()['id']
 
@@ -32,7 +32,7 @@ async def test_reserved_copy_cannot_be_deleted(client, customer, staff, add_copy
 
 
 async def test_wantlist_match_on_new_inventory(client, customer, staff, add_record):
-    """Spec: adding a matching copy via POST /inventory sets matched_item_id on the wantlist entry."""
+    """Adding a matching copy via POST /inventory sets matched_item_id on the wantlist entry."""
     entry = (await client.post('/wantlist', headers=customer.headers, json={
         'artist': 'kraftwerk', 'title': 'AUTOBAHN', 'max_price': '40', 'min_condition': 'VG+'})).json()
     assert entry['matched_item_id'] is None

@@ -1,0 +1,12 @@
+# Keep the build context small and secrets OUT of the images.
+.env
+.env.*
+!.env.example
+.venv/
+.git/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+tests/
+docs/
+# (scripts/data/knowledge/*.md must stay: seed_knowledge reads them)

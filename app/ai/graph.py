@@ -1,6 +1,6 @@
-"""The LangGraph graph (spec 4.2), assembled from the nodes (10.3) and routing (10.5).
+"""The LangGraph graph, assembled from the nodes and the routing.
 
-Built in the guide's order (10.4), each stage tested in tests/graph/test_graph.py:
+Built (and tested in tests/graph/test_graph.py) stage by stage:
   A  happy path        understand → load_context → search → filter → compose → END, + polite_refusal
   B  verification      compose → verify → (retry once) → fallback_template
   C  relax loop        filter → relax → search … → offer_wantlist
@@ -8,8 +8,8 @@ Built in the guide's order (10.4), each stage tested in tests/graph/test_graph.p
   E  collection        collection_help → collection_insights → compose
   F  Human-in-the-Loop prepare_* / offer_wantlist → confirm_action (interrupt) → execute_action → compose
 
-The checkpointer is passed in: InMemorySaver in scripts/tests, AsyncPostgresSaver in the app
-(Phase 11). Without a checkpointer the confirmation interrupt can't resume.
+The checkpointer is passed in: InMemorySaver in scripts/tests, AsyncPostgresSaver in the app.
+Without a checkpointer the confirmation interrupt can't resume.
 """
 
 from langgraph.graph import END, START, StateGraph

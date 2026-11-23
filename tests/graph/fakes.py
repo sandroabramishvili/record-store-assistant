@@ -1,4 +1,4 @@
-"""Test doubles for the graph: no Gemini, no database (spec 12: no real LLM calls in tests).
+"""Test doubles for the graph: no Gemini, no database (no real LLM calls in tests).
 
 FakeLLM  — `with_structured_output(Schema)` returns the next queued object of that type
            and records every prompt it received (so tests can check what the LLM saw).

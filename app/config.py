@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     # lower = faster and cheaper. Empty = the model's default.
     chat_thinking_level: str | None = 'low'
     llm_timeout_seconds: float = 30
-    # Chat limits (spec 11). One turn = up to 2-3 LLM calls (+ retries), so a hard ceiling for
+    # Chat limits. One turn = up to 2-3 LLM calls (+ retries), so a hard ceiling for
     # the whole turn keeps a hanging model from holding the customer's screen for minutes.
     chat_turn_timeout_seconds: float = 90
     chat_messages_per_hour: int = 30
@@ -36,13 +36,13 @@ class Settings(BaseSettings):
     # (Matryoshka training) with little quality loss. 768 = 4x smaller, and below
     # pgvector's 2000-dimension limit for an HNSW index. Changing it requires re-indexing.
     embedding_dimensions: int = 768
-    # Knowledge search (spec 8.9): chunks below this cosine similarity are ignored, so the
+    # Knowledge search: chunks below this cosine similarity are ignored, so the
     # assistant says "I don't know" instead of answering from an unrelated article.
     # Measured on our articles: real questions ~0.75-0.80, off-topic ~0.48.
     knowledge_min_score: float = 0.6
     knowledge_top_k: int = 3
 
-    # Observability (Phase 13). Read here, NOT by LangChain from os.environ: pydantic-settings
+    # Observability (LangSmith). Read here, NOT by LangChain from os.environ: pydantic-settings
     # does not export .env to the environment, so app/ai/tracing.py builds the tracer itself.
     langsmith_tracing: bool = False
     langsmith_api_key: str = ''

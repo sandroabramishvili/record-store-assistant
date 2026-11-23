@@ -1,6 +1,6 @@
 """Event loop choice, for Windows only.
 
-psycopg 3 (used by PGVector and, in Phase 11, by the LangGraph checkpointer) cannot run
+psycopg 3 (used by PGVector and by the LangGraph checkpointer) cannot run
 in async mode on Windows' default ProactorEventLoop; it needs a SelectorEventLoop.
 On Linux/macOS (and in Docker) the default loop already works and nothing changes.
 

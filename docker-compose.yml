@@ -1,18 +1,59 @@
+# The whole system: Postgres (+pgvector) → API (FastAPI + LangGraph) → UI (Streamlit).
+#
+#   docker compose up --build -d
+#   docker compose exec api python -m scripts.seed     # catalog, demo users, knowledge, vectors
+#   open http://localhost:8501
+#
+# Secrets come from .env (GOOGLE_API_KEY, JWT_SECRET, LANGSMITH_*); see .env.example.
+# Host ports can be changed without editing this file: DB_PORT, API_PORT, UI_PORT.
+#
+# Only the UI is published on all interfaces. Postgres and the API listen on 127.0.0.1 of
+# the host (for pgAdmin, Swagger, curl); on a public server nobody outside can reach them.
+# The UI talks to the API over Compose's internal network (http://api:8000).
+
 services:
   db:
     image: pgvector/pgvector:pg17
     environment:
       POSTGRES_USER: store
-      POSTGRES_PASSWORD: store
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-store}
       POSTGRES_DB: record_store
     ports:
-      - "5433:5432"   # host 5433 → container 5432 (a local Windows Postgres already uses 5432)
+      - "127.0.0.1:${DB_PORT:-5433}:5432"   # 5433: a local Windows Postgres already uses 5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U store -d record_store"]
       interval: 5s
       retries: 10
+    restart: unless-stopped
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      # Inside Docker the database host is "db", not localhost: this overrides .env.
+      DATABASE_URL: postgresql+asyncpg://store:${POSTGRES_PASSWORD:-store}@db:5432/record_store
+      ENVIRONMENT: ${DEPLOY_ENV:-docker}       # LangSmith tag env:docker (or env:prod on a server)
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    environment:
+      API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy            # migrations done, API answering
+    ports:
+      - "${UI_PORT:-8501}:8501"
+    restart: unless-stopped
 
 volumes:
   pgdata:

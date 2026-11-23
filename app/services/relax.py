@@ -1,4 +1,4 @@
-"""Loosening a search that found nothing (spec 4.3, `relax_constraints`).
+"""Loosening a search that found nothing (`relax_constraints`).
 
 Only SOFT constraints from the request are relaxed. Hard rules (stock, ownership,
 profile budget_cap, min_condition) are never touched: they aren't even in this dict,

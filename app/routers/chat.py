@@ -1,4 +1,4 @@
-"""Chat (spec 7.7). One ChatSession = one LangGraph thread (`chat-{id}`).
+"""Chat. One ChatSession = one LangGraph thread (`chat-{id}`).
 
 The graph is built once in the app's lifespan (main.py) with the Postgres checkpointer and
 reached through the `get_graph` dependency (tests override it with a fake-LLM graph).
@@ -74,7 +74,7 @@ def _claim_or_409(session_id: int) -> None:
 
 
 async def enforce_rate_limit(db: DbSession, user_id: int) -> None:
-    """Spec 11: at most N customer messages per rolling hour, over ALL their chats → 429.
+    """At most N customer messages per rolling hour, over ALL their chats → 429.
 
     Counted from ChatMessage rows (role='user'), with the database clock, so it needs no
     extra table and works the same with several API processes. Retry-After = when the

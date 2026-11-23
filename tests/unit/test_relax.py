@@ -49,7 +49,7 @@ def test_no_price_goes_straight_to_decade_and_genres():
 
 
 def test_relax_never_touches_hard_rules():
-    """Spec: stock, ownership, budget_cap and min_condition are never relaxed."""
+    """Stock, ownership, budget_cap and min_condition are never relaxed."""
     profile = {'budget_cap': 45, 'min_condition': 'NM', 'disliked_genres': ['country']}
     profile_before = copy.deepcopy(profile)
     c = request()

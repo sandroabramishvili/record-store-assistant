@@ -1,4 +1,4 @@
-"""Wantlist matching rules (spec 6.6): code, not the LLM, decides when a wanted record is in stock.
+"""Wantlist matching rules: code, not the LLM, decides when a wanted record is in stock.
 
 Pure functions: plain dicts in, answers out. No DB imports, so unit tests need nothing.
 The DB side (loading entries/copies, saving `matched_item_id`) is in

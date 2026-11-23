@@ -14,7 +14,7 @@ async def test_release_vector_follows_create_update_delete(client, staff):
     assert [r[0] for r in rows] == [f'record-{record_id}']
     assert 'hypnotic' in rows[0][1] and rows[0][2]['record_id'] == record_id
 
-    # Editing a release updates its vector (guide "Done when"), same id → no duplicate.
+    # Editing a release updates its vector, same id → no duplicate.
     await client.put(f'/records/{record_id}', headers=staff.headers,
                      json=RECORD | {'description': 'Synth-heavy jazz-funk.', 'release_year': 2015})
     rows = await count_vectors('records')

@@ -1,6 +1,6 @@
-"""Chat endpoints (Phase 11) over HTTP: real app, real Postgres checkpointer, real repository.
+"""Chat endpoints over HTTP: real app, real Postgres checkpointer, real repository.
 
-Only the LLM is fake (spec 12). Covers the Phase 11 "Done when" list:
+Only the LLM is fake. Covers:
 - search → "hold the second one" → confirm → the reservation exists in the DB
 - an API restart while a confirmation is pending (new graph + new pool) → confirming still works
 - someone else's session → 404
@@ -155,7 +155,7 @@ async def test_confirmation_survives_an_api_restart(client, llm, jazz_fan):
 
 
 async def test_every_turn_is_counted_once_by_intent(client, llm, jazz_fan):
-    """Phase 15: /analytics/intents counts customer REQUESTS. The answer after "yes" belongs
+    """/analytics/intents counts customer REQUESTS. The answer after "yes" belongs
     to the reservation turn already counted; an off-topic turn counts although it never searches."""
     sid, _ = await search_then_hold_second(client, jazz_fan, llm)       # find_record, then reserve (paused)
     llm.add(AnswerDraft(message='Held.'), understood('off_topic'))
@@ -174,7 +174,7 @@ async def test_every_turn_is_counted_once_by_intent(client, llm, jazz_fan):
 
 
 async def test_user_cannot_read_others_chat(client, llm, jazz_fan, other_customer):
-    """Spec test: someone else's chat → 404 (reading, writing, confirming, deleting, listing)."""
+    """Someone else's chat → 404 (reading, writing, confirming, deleting, listing)."""
     sid = await new_chat(client, jazz_fan)
     bob = other_customer.headers
     assert (await client.get(f'/chat/sessions/{sid}/messages', headers=bob)).status_code == 404
@@ -232,7 +232,7 @@ async def test_blank_or_too_long_message_is_rejected(client, llm, jazz_fan):
     assert llm.calls == []
 
 
-# ---------- Phase 14: limits ----------
+# ---------- limits ----------
 
 
 async def add_user_messages(sid: int, count: int, age: timedelta = timedelta(0)) -> None:

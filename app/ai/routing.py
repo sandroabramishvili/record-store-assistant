@@ -1,6 +1,6 @@
-"""Routing: plain functions that read the state and name the next node (guide 10.5).
+"""Routing: plain functions that read the state and name the next node.
 
-Pure: no I/O, no LLM. Every branch of the spec 4.2 diagram is decided here, by code.
+Pure: no I/O, no LLM. Every branch of the graph is decided here, by code.
 """
 
 from langgraph.graph import END

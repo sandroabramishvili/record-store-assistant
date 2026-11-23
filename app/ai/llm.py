@@ -2,7 +2,7 @@
 
 The graph never parses free text from the model: it asks for a Pydantic object
 (`with_structured_output`) and gets a validated `RequestAnalysis` / `AnswerDraft`,
-or an exception. Tests replace the model with a fake (Phase 12), so nothing here
+or an exception. Tests replace the model with a fake, so nothing here
 is imported by the pure business-logic modules.
 
 No `temperature`: newer Gemini models (e.g. gemini-3.5-flash-lite) use fixed sampling

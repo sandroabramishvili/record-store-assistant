@@ -22,7 +22,7 @@ class SessionOut(BaseModel):
     updated_at: datetime
 
 
-MAX_MESSAGE_CHARS = 1000   # spec 11 cost control: longer → 422 before anything runs
+MAX_MESSAGE_CHARS = 1000   # cost control: longer → 422 before anything runs
 
 
 class MessageIn(BaseModel):
@@ -32,7 +32,7 @@ class MessageIn(BaseModel):
 
 
 class ConfirmIn(BaseModel):
-    """The answer to a confirmation_required event (spec 7.7)."""
+    """The answer to a confirmation_required event."""
 
     approved: bool
 
